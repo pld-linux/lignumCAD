@@ -13,7 +13,7 @@ BuildRequires:	qt-devel >= 3.0.6
 #BuildRequires:	freetype-devel >= 2.1.3
 URL:		http://www.lignumcomputing.com/lignumcad/
 #URL:		http://lignumcad.sourceforge.net
-Buildroot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 lignumCAD is a Computer-Aided Design (CAD) program geared specifically
