@@ -26,11 +26,11 @@ on custom stock and photo-realistic rendering of the final design.
 %description -l pl
 lignumCAD jest programem komputerowego wspierania projektowania (CAD)
 stworzonym specjalnie dla stolarzy, aby u³atwiæ tworzenie
-indywidualnych projektów mebli i innych recznie wykonywanych
+indywidualnych projektów mebli i innych rêcznie wykonywanych
 przedmiotów. Wspiera on zarówno dwu- jak i trójwymiarowe prezentacje
 projektu z pe³n± parametryzacj± wzajemnych zale¿no¶ci. Dodatkowe
-mozliwo¶ci programu obejmuj± zoptymalizowane przedstawienie
-rozliczenia materia³ów oraz fotagraficznie realistyczne symulacja
+mo¿liwo¶ci programu obejmuj± zoptymalizowane przedstawienie
+rozliczenia materia³ów oraz fotograficznie realistyczne symulacje
 koñcowego wygl±du przedmiotu projektu.
 
 %prep
