@@ -1,0 +1,181 @@
+--- lignumCAD/vectoralgebra.h.orig	Mon Oct 28 19:28:55 2002
++++ lignumCAD/vectoralgebra.h	Tue Jul 22 16:02:26 2003
+@@ -65,7 +65,7 @@
+   };
+ 
+ #ifndef LC_NO_DEBUG
+-  inline ostream& operator<< ( ostream& o, const Space2D::Vector v )
++  inline std::ostream& operator<< ( std::ostream& o, const Space2D::Vector v )
+   {
+     return o << v[Space2D::X] << ", " << v[Space2D::Y];
+   }
+@@ -159,7 +159,7 @@
+   };
+ 
+ #ifndef LC_NO_DEBUG
+-  inline ostream& operator<< ( ostream& o, const Space2D::Point p )
++  inline std::ostream& operator<< ( std::ostream& o, const Space2D::Point p )
+   {
+     return o << p[Space2D::X] << ", " << p[Space2D::Y];
+   }
+@@ -253,7 +253,7 @@
+   };
+ 
+ #ifndef LC_NO_DEBUG
+-  inline ostream& operator<< ( ostream& o, const Space3D::Vector v )
++  inline std::ostream& operator<< ( std::ostream& o, const Space3D::Vector v )
+   {
+     return o << v[Space3D::X] << ", " << v[Space3D::Y] << ", " << v[Space3D::Z];
+   }
+@@ -347,7 +347,7 @@
+   };
+ 
+ #ifndef LC_NO_DEBUG
+-  inline ostream& operator<< ( ostream& o, const Space3D::Point p )
++  inline std::ostream& operator<< ( std::ostream& o, const Space3D::Point p )
+   {
+     return o << p[Space3D::X] << ", " << p[Space3D::Y] << ", " << p[Space3D::Z];
+   }
+@@ -563,14 +563,14 @@
+     return c;
+   }
+ 
+-  inline ostream& operator<< ( ostream& o, const Matrix& m )
++  inline std::ostream& operator<< ( std::ostream& o, const Matrix& m )
+   {
+     o << "[[ " << m[X][X] << ", " << m[Y][X] << ", " << m[Z][X] << ", " << m[W][X]
+-      << "]," << endl;
++      << "]," << std::endl;
+     o << " [ " << m[X][Y] << ", " << m[Y][Y] << ", " << m[Z][Y] << ", " << m[W][Y]
+-      << "]," << endl;
++      << "]," << std::endl;
+     o << " [ " << m[X][Z] << ", " << m[Y][Z] << ", " << m[Z][Z] << ", " << m[W][Z]
+-      << "]]" << endl;
++      << "]]" << std::endl;
+     return o;
+   }
+ } // End of Space3D namespace
+--- lignumCAD/selectednames.h.orig	Mon Oct 28 20:00:25 2002
++++ lignumCAD/selectednames.h	Tue Jul 22 16:06:22 2003
+@@ -36,7 +36,7 @@
+  * There seems to be little reason to hide the nature of this structure
+  * since every thing is essentially an automatic variable.
+  */
+-class SelectedNames : public multimap< GLfloat, vector< GLuint > >
++class SelectedNames : public std::multimap< GLfloat, std::vector< GLuint > >
+ {
+ public:
+   /*!
+@@ -52,7 +52,7 @@
+     GLfloat z0 = (GLfloat) (*hit_record++) / 0x7fffffff;
+     hit_record++;		// For now, ignore the z far value.
+     iterator record =
+-      insert( pair< GLfloat, vector< GLuint > >( z0, vector< GLuint >( names ) ) );
++      insert( std::pair< GLfloat, std::vector< GLuint > >( z0, std::vector< GLuint >( names ) ) );
+     for ( GLuint j = 0; j < names; j++ )
+       (*record).second[j] = *hit_record++;
+   }
+@@ -114,20 +114,20 @@
+   return equal;
+ }
+ 
+-inline ostream& operator<< ( ostream& o, const SelectedNames& sn )
++inline std::ostream& operator<< ( std::ostream& o, const SelectedNames& sn )
+ {
+   if ( sn.empty() )
+-    return o << "empty" << endl;
++    return o << "empty" << std::endl;
+ 
+   SelectedNames::const_iterator i = sn.begin();
+ 
+   for ( ; i != sn.end(); ++i ) {
+     o << "Depth: " << (*i).first << ": ";
+-    vector<GLuint>::const_iterator j = (*i).second.begin();
++    std::vector<GLuint>::const_iterator j = (*i).second.begin();
+     for ( ; j != (*i).second.end(); ++j ) {
+       o << (*j) << " ";
+     }
+-    o << endl;
++    o << std::endl;
+   }
+ 
+   return o;
+--- lignumCAD/curve.h.orig	Fri Oct 18 22:44:27 2002
++++ lignumCAD/curve.h	Tue Jul 22 16:07:09 2003
+@@ -109,11 +109,11 @@
+      * \param o C++ output stream.
+      * \return reference to output stream.
+      */
+-    virtual ostream& edit ( ostream& o ) const = 0;
++    virtual std::ostream& edit ( std::ostream& o ) const = 0;
+ #endif
+   };
+ #ifndef LC_NO_DEBUG
+-  inline ostream& operator<< ( ostream& o, const Curve& c )
++  inline std::ostream& operator<< ( std::ostream& o, const Curve& c )
+   {
+     return c.edit( o );
+   }
+--- lignumCAD/figureview.h.orig	Wed Nov 13 20:36:06 2002
++++ lignumCAD/figureview.h	Tue Jul 22 16:07:58 2003
+@@ -69,24 +69,24 @@
+    * \param entity type of entity currently being sought.
+    * \return selection string representation.
+    */
+-  virtual QString selectionText ( const vector<GLuint>& selection_name,
++  virtual QString selectionText ( const std::vector<GLuint>& selection_name,
+ 				  SelectionEntity entity ) const = 0;
+ 
+   //  virtual FigureBase* figure ( void ) const = 0;
+   virtual CreateObject* memento ( void ) = 0;
+ 
+   virtual View* lookup ( QStringList& path_components ) const = 0;
+-  virtual void lookup ( QValueVector<uint>& id_path, vector<GLuint>& name_path ) const = 0;
++  virtual void lookup ( QValueVector<uint>& id_path, std::vector<GLuint>& name_path ) const = 0;
+ 
+   bool isHighlighted ( void ) const { return highlighted_; }
+   void setHighlighted ( bool highlight );
+   virtual void setHighlighted ( bool highlight, SelectionEntity entity,
+-				const vector<GLuint>& items ) = 0;
++				const std::vector<GLuint>& items ) = 0;
+ 
+   bool isActivated ( void ) const { return activated_; }
+   void setActivated ( bool activate );
+   virtual void setActivated ( bool activate, SelectionEntity entity,
+-			      const vector<GLuint>& items ) = 0;
++			      const std::vector<GLuint>& items ) = 0;
+ 
+   virtual InputObject* createInput ( void ) = 0;
+   virtual InputObject* modifyInput ( void ) = 0;
+@@ -130,7 +130,7 @@
+     virtual Curve* geometry ( GLuint /*selection_name*/ ) const { return 0; }
+ 
+     // Not implemented in 2D...
+-    void lookup ( QValueVector<uint>& /*id_path*/, vector<GLuint>& /*name_path*/ )
++    void lookup ( QValueVector<uint>& /*id_path*/, std::vector<GLuint>& /*name_path*/ )
+       const
+     {}
+   };
+--- lignumCAD/pageview.h.orig	Sun Dec  8 20:21:36 2002
++++ lignumCAD/pageview.h	Tue Jul 22 16:08:38 2003
+@@ -139,7 +139,7 @@
+   void paste ( void );
+ 
+   virtual View* lookup ( QStringList& path_components ) const;
+-  virtual vector<GLuint> lookup ( QValueVector<uint>& id_path ) const;
++  virtual std::vector<GLuint> lookup ( QValueVector<uint>& id_path ) const;
+ 
+   /*!
+    * (Temporarily) turn off any highlights or activations
+@@ -207,9 +207,9 @@
+   virtual void cancelOperation ( void ) = 0;
+ 
+   void activateFigure ( FigureViewBase* figure_view );
+-  void activateFigure ( const vector<GLuint>& selection_name );
++  void activateFigure ( const std::vector<GLuint>& selection_name );
+   void deactivateFigure( GLuint figure, GLuint geometry );
+-  void deactivateFigure ( const vector<GLuint>& selection_name );
++  void deactivateFigure ( const std::vector<GLuint>& selection_name );
+   /*!
+    * Check to make sure the new name is not used by another figure
+    * of the same type on the page. Displays a modal dialog if the
