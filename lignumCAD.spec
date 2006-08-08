@@ -36,7 +36,7 @@ koñcowego wygl±du przedmiotu projektu.
 %prep
 %setup -q -n %{name}
 # only partial (to the point where OpenCascade is required), needs finishing
-%patch -p1
+%patch0 -p1
 
 %build
 export QTDIR=/usr
