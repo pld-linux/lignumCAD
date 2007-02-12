@@ -1,5 +1,5 @@
 Summary:	lignumCAD - A Computer-Aided Design program for designing furniture
-Summary(pl):	lignumCAD - program do komputerowo wspomaganego projektowania mebli
+Summary(pl.UTF-8):   lignumCAD - program do komputerowo wspomaganego projektowania mebli
 Name:		lignumCAD
 Version:	0.2
 Release:	0.1
@@ -23,15 +23,15 @@ representations of the design with full parametric interrelations.
 Additional features include optimized layout of the bill of materials
 on custom stock and photo-realistic rendering of the final design.
 
-%description -l pl
+%description -l pl.UTF-8
 lignumCAD jest programem komputerowego wspierania projektowania (CAD)
-stworzonym specjalnie dla stolarzy, aby u³atwiæ tworzenie
-indywidualnych projektów mebli i innych rêcznie wykonywanych
-przedmiotów. Wspiera on zarówno dwu- jak i trójwymiarowe prezentacje
-projektu z pe³n± parametryzacj± wzajemnych zale¿no¶ci. Dodatkowe
-mo¿liwo¶ci programu obejmuj± zoptymalizowane przedstawienie
-rozliczenia materia³ów oraz fotograficznie realistyczne symulacje
-koñcowego wygl±du przedmiotu projektu.
+stworzonym specjalnie dla stolarzy, aby uÅ‚atwiÄ‡ tworzenie
+indywidualnych projektÃ³w mebli i innych rÄ™cznie wykonywanych
+przedmiotÃ³w. Wspiera on zarÃ³wno dwu- jak i trÃ³jwymiarowe prezentacje
+projektu z peÅ‚nÄ… parametryzacjÄ… wzajemnych zaleÅ¼noÅ›ci. Dodatkowe
+moÅ¼liwoÅ›ci programu obejmujÄ… zoptymalizowane przedstawienie
+rozliczenia materiaÅ‚Ã³w oraz fotograficznie realistyczne symulacje
+koÅ„cowego wyglÄ…du przedmiotu projektu.
 
 %prep
 %setup -q -n %{name}
