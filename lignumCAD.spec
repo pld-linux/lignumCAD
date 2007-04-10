@@ -7,7 +7,7 @@ License:	GPL/LGPL
 Group:		X11/Applications/Science
 Source0:	%{name}.tar.gz
 Patch0:		%{name}-gcc3.patch
-BuildRequires:	qt-devel >= 3.0.6
+BuildRequires:	qt-devel >= 3:3.0.6
 #BuildRequires:	OpenCASCADE-devel >= 4
 #BuildRequires:	OpenGL-devel >= 4.1
 #BuildRequires:	freetype-devel >= 2.1.3
