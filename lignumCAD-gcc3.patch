@@ -179,3 +179,778 @@
    /*!
     * Check to make sure the new name is not used by another figure
     * of the same type on the page. Displays a modal dialog if the
+diff -ur -urp lignumCAD/annotationview.cpp ../lignumCAD-1/annotationview.cpp
+--- lignumCAD/annotationview.cpp	2002-12-03 17:04:11.000000000 +0100
++++ ../lignumCAD-1/annotationview.cpp	2010-07-09 01:05:46.000000000 +0200
+@@ -850,7 +850,7 @@ namespace Space2D {
+     return annotation_->dbURL();
+   }
+ 
+-  QString AnnotationView::selectionText ( const vector<GLuint>& /*selection_name*/,
++  QString AnnotationView::selectionText ( const std::vector<GLuint>& /*selection_name*/,
+ 					  SelectionEntity /*entity*/ ) const
+   {
+     return annotation_->name();
+@@ -858,14 +858,14 @@ namespace Space2D {
+ 
+ 
+   void AnnotationView::setHighlighted ( bool highlight, SelectionEntity entity,
+-					const vector<GLuint>& /*items*/ )
++					const std::vector<GLuint>& /*items*/ )
+   {
+     if ( entity == FIGURE )
+       FigureViewBase::setHighlighted( highlight );
+   }
+ 
+   void AnnotationView::setActivated ( bool activate, SelectionEntity entity,
+-				      const vector<GLuint>& /*items*/ )
++				      const std::vector<GLuint>& /*items*/ )
+   {
+     if ( entity == FIGURE )
+       FigureViewBase::setActivated( activate );
+diff -ur -urp lignumCAD/annotationview.h ../lignumCAD-1/annotationview.h
+--- lignumCAD/annotationview.h	2002-11-20 16:30:39.000000000 +0100
++++ ../lignumCAD-1/annotationview.h	2010-05-29 16:28:09.000000000 +0200
+@@ -297,7 +297,7 @@ namespace Space2D {
+      * \param entity entity selected for in view.
+      * \return string representing selection.
+      */
+-    QString selectionText ( const vector<GLuint>& selection_name,
++    QString selectionText ( const std::vector<GLuint>& selection_name,
+ 			    SelectionEntity entity ) const;
+     //! \return 0: has no subcomponents
+     View* lookup ( QStringList& /*path_components*/ ) const { return 0; }
+@@ -308,7 +308,7 @@ namespace Space2D {
+      * \param item OpenGL selection names of subcomponents (none here).
+      */
+     void setHighlighted ( bool highlight, SelectionEntity entity,
+-			  const vector<GLuint>& items );
++			  const std::vector<GLuint>& items );
+     /*!
+      * Set all the designated items to the given activation mode.
+      * \param activate new activation mode.
+@@ -316,7 +316,7 @@ namespace Space2D {
+      * \param item OpenGL selection names of subcomponents (none here).
+      */
+     void setActivated ( bool activate, SelectionEntity entity,
+-			const vector<GLuint>& items );
++			const std::vector<GLuint>& items );
+     //! \return 0: annotations cannot be dimensioned.
+     uint dimensionPickCount ( void ) const { return 0; }
+     //! Does nothing in this context.
+@@ -564,7 +564,7 @@ namespace Space2D {
+     //! lookup via OpenGL selection name.
+     QIntDict< GraphicsView > annotation_objects_;
+     //! Convert a handle selection name into a modification action.
+-    map< int, lC::ValidDelta( AnnotationView::* ) ( const Point&, Point& )> adjustments_;
++    std::map< int, lC::ValidDelta( AnnotationView::* ) ( const Point&, Point& )> adjustments_;
+     //! The annotation text editing dialog.
+     static AnnotationInfoDialog* annotation_info_dialog_;
+   };
+diff -ur -urp lignumCAD/assemblyview.cpp ../lignumCAD-1/assemblyview.cpp
+--- lignumCAD/assemblyview.cpp	2003-01-03 16:28:09.000000000 +0100
++++ ../lignumCAD-1/assemblyview.cpp	2010-05-29 18:56:20.000000000 +0200
+@@ -2041,7 +2041,7 @@ void AssemblyView::constraintAdded ( con
+   updateConstraintLabel();
+ }
+ 
+-  inline QString namePathToString ( const vector<GLuint>& ID )
++  inline QString namePathToString ( const std::vector<GLuint>& ID )
+   {
+     QString id_string;
+ 
+diff -ur -urp lignumCAD/centerlineview.h ../lignumCAD-1/centerlineview.h
+--- lignumCAD/centerlineview.h	2002-11-20 21:13:28.000000000 +0100
++++ ../lignumCAD-1/centerlineview.h	2010-05-29 16:27:32.000000000 +0200
+@@ -151,14 +151,14 @@ namespace Space2D {
+     QString name ( void ) const;
+     QString type ( void ) const;
+     DBURL dbURL ( void ) const;
+-    QString selectionText ( const vector<GLuint>& selection_name,
++    QString selectionText ( const std::vector<GLuint>& selection_name,
+ 			    SelectionEntity entity ) const;
+     View* lookup ( QStringList& path_components ) const;
+ 
+     void setHighlighted ( bool highlight, SelectionEntity entity,
+-			  const vector<GLuint>& items );
++			  const std::vector<GLuint>& items );
+     void setActivated( bool activate, SelectionEntity entity,
+-		       const vector<GLuint>& items );
++		       const std::vector<GLuint>& items );
+ 
+     InputObject* createInput ( void ) { return &create_input_; }
+     InputObject* modifyInput ( void );
+diff -ur -urp lignumCAD/designbookview.cpp ../lignumCAD-1/designbookview.cpp
+--- lignumCAD/designbookview.cpp	2002-12-13 17:20:40.000000000 +0100
++++ ../lignumCAD-1/designbookview.cpp	2010-05-29 16:23:32.000000000 +0200
+@@ -1322,18 +1322,18 @@ View* DesignBookView::lookup ( const DBU
+ 
+ // Find the OpenGL selection name path for a given id path.
+ 
+-vector<GLuint> DesignBookView::lookup ( const QValueVector<uint>& id_path ) const
++std::vector<GLuint> DesignBookView::lookup ( const QValueVector<uint>& id_path ) const
+ {
+   QValueVector<uint> my_path = id_path;
+ 
+   if ( my_path.empty() || my_path[0] != model_->id() )
+-    return vector<GLuint>();	// Not this model! Really an error...
++    return std::vector<GLuint>();	// Not this model! Really an error...
+ 
+   // Pop the model id off the list
+   my_path.erase( my_path.begin() );
+ 
+   if ( my_path.empty() )
+-    return vector<GLuint>();	// Really an error...
++    return std::vector<GLuint>();	// Really an error...
+ #if 0
+   QMap<uint,PageBase*>::const_iterator p = pages_.find( my_path[0] );
+ 
+@@ -1352,7 +1352,7 @@ vector<GLuint> DesignBookView::lookup ( 
+     }
+   }
+ #endif
+-  return vector<GLuint>();	// Really an error...
++  return std::vector<GLuint>();	// Really an error...
+ }
+ 
+ // Replace the current model with a new one.
+diff -ur -urp lignumCAD/designbookview.h ../lignumCAD-1/designbookview.h
+--- lignumCAD/designbookview.h	2002-12-09 20:36:28.000000000 +0100
++++ ../lignumCAD-1/designbookview.h	2010-05-29 16:13:27.000000000 +0200
+@@ -113,7 +113,7 @@ public:
+   QListViewItem* previousItem ( uint id ) const;
+   void deletePage ( PageView* page_view );
+   View* lookup ( const DBURL& db_url );
+-  vector<GLuint> lookup ( const QValueVector<uint>& id_path ) const;
++  std::vector<GLuint> lookup ( const QValueVector<uint>& id_path ) const;
+ 
+   void modelChanged ( bool status );
+ 
+diff -ur -urp lignumCAD/gl2ps_qt.cpp ../lignumCAD-1/gl2ps_qt.cpp
+--- lignumCAD/gl2ps_qt.cpp	2002-12-05 15:50:56.000000000 +0100
++++ ../lignumCAD-1/gl2ps_qt.cpp	2010-07-09 00:30:46.000000000 +0200
+@@ -127,7 +127,7 @@ extern "C" {
+       break;
+     case GL2PS_LINE :
+       if(gl2ps.shade){
+-	cout << "somehow, we got a shaded line anyway" << endl;
++	std::cout << "somehow, we got a shaded line anyway" << endl;
+       }
+       else{
+ 	QColor color( F2CI( prim->verts[0].rgba[0] ),
+@@ -167,7 +167,7 @@ extern "C" {
+       break;
+     case GL2PS_TRIANGLE :
+       if(gl2ps.shade){
+-	cout << "somehow, we got a shaded triangle anyway" << endl;
++	std::cout << "somehow, we got a shaded triangle anyway" << endl;
+       }
+       else{
+ #if 0
+diff -ur -urp lignumCAD/lcdebug.h ../lignumCAD-1/lcdebug.h
+--- lignumCAD/lcdebug.h	2002-12-13 13:12:55.000000000 +0100
++++ ../lignumCAD-1/lcdebug.h	2010-07-09 01:10:52.000000000 +0200
+@@ -130,7 +130,7 @@ inline ostream& operator<< ( ostream& o,
+ }
+ #endif // _TopAbs_ShapeEnum_HeaderFile
+ 
+-inline ostream& operator<< ( ostream& o, const QValueVector<uint>& id_path )
++inline std::ostream& operator<< ( std::ostream& o, const QValueVector<uint>& id_path )
+ {
+   if ( id_path.size() > 0 ) {
+     o << id_path[0];
+diff -ur -urp lignumCAD/line.h ../lignumCAD-1/line.h
+--- lignumCAD/line.h	2002-10-21 13:26:34.000000000 +0200
++++ ../lignumCAD-1/line.h	2010-05-29 19:24:51.000000000 +0200
+@@ -59,7 +59,7 @@ namespace Space2D {
+     Vector normal ( void ) const;
+ 
+     virtual bool dependsOn( const Line* line ) const = 0;
+-    virtual ostream& edit ( ostream& o ) const = 0;
++    virtual std::ostream& edit ( std::ostream& o ) const = 0;
+ 
+   signals:
+     void destroyedLine ();
+@@ -77,7 +78,7 @@ namespace Space2D {
+     ~Axis ( void ) {}
+ 
+     bool dependsOn ( const Line* ) const { return false; }
+-    ostream& edit ( ostream& ) const;
++    std::ostream& edit ( std::ostream& ) const;
+ 
+     void write ( QDomElement& xml_rep ) const;
+   };
+@@ -104,7 +105,7 @@ namespace Space2D {
+     virtual Point setPosition ( const Point& position ) = 0;
+     virtual void referenceModified ( void ) = 0;
+     virtual bool dependsOn ( const Line* ) const = 0;
+-    virtual ostream& edit ( ostream& o ) const = 0;
++    virtual std::ostream& edit ( std::ostream& o ) const = 0;
+     virtual QString detail ( void ) const = 0;
+     virtual QString note ( void ) const = 0;
+     virtual void write ( QDomElement& xml_rep ) const = 0;
+@@ -160,7 +161,7 @@ namespace Space2D {
+     void resolvedReference ( Line* reference );
+     void referenceModified ( void ) {}
+ 
+-    ostream& edit ( ostream& o ) const;
++    std::ostream& edit ( std::ostream& o ) const;
+     QString detail ( void ) const;
+     QString note ( void ) const { return QString::null; }
+     void write ( QDomElement& xml_rep ) const;
+@@ -201,7 +202,7 @@ namespace Space2D {
+ 
+     void referenceModified ( void );
+ 
+-    ostream& edit ( ostream& o ) const;
++    std::ostream& edit ( std::ostream& o ) const;
+     QString detail ( void ) const;
+     QString note ( void ) const { return QString::null; }
+     void write ( QDomElement& xml_rep ) const;
+@@ -243,7 +244,7 @@ namespace Space2D {
+ 
+     void referenceModified ( void );
+ 
+-    ostream& edit ( ostream& o ) const;
++    std::ostream& edit ( std::ostream& o ) const;
+     QString detail ( void ) const;
+     QString note ( void ) const;
+     void write ( QDomElement& xml_rep ) const;
+@@ -284,7 +285,7 @@ namespace Space2D {
+       return constraint_->dependsOn( line );
+     }
+ 
+-    ostream& edit ( ostream& o ) const { return constraint_->edit( o ); }
++    std::ostream& edit ( std::ostream& o ) const { return constraint_->edit( o ); }
+ 
+     QString detail ( void ) const;
+     // This is an (optional) annotation of the dimension string.
+@@ -343,7 +344,7 @@ namespace Space3D {
+     Vector normal ( void ) const;
+ 
+     bool dependsOn( const Line* /*line*/ ) const { return false; }
+-    ostream& edit ( ostream& o ) const
++    std::ostream& edit ( std::ostream& o ) const
+     { return o << "Line: " << "origin: " << o_ << ", direction: " << e_; }
+ 
+     void write ( QDomElement& /*xml_rep*/ ) const { }
+diff -ur -urp lignumCAD/ocsolid.h ../lignumCAD-1/ocsolid.h
+--- lignumCAD/ocsolid.h	2002-11-21 15:59:21.000000000 +0100
++++ ../lignumCAD-1/ocsolid.h	2010-05-29 18:54:30.000000000 +0200
+@@ -231,7 +231,7 @@ namespace Space3D {
+      */
+     QString faceName ( const TopoDS_Face& face ) const
+     {
+-      hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator face_name;
++      __gnu_cxx::hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator face_name;
+ 
+       face_name = face_names_.find( face );
+ 
+@@ -245,9 +245,9 @@ namespace Space3D {
+      */
+     const TopoDS_Face face ( const QString& name ) const
+     {
+-      pair<QString,uint> name_id = PartFactory::instance()->name( name );
++      std::pair<QString,uint> name_id = PartFactory::instance()->name( name );
+ 
+-      hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator face =
++      __gnu_cxx::hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator face =
+ 	face_names_.begin();
+ 
+       for ( ; face != face_names_.end(); ++face )
+@@ -261,7 +261,7 @@ namespace Space3D {
+      */
+     const TopoDS_Face face ( uint id ) const
+     {
+-      hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator face =
++      __gnu_cxx::hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator face =
+ 	face_names_.begin();
+       for ( ; face != face_names_.end(); ++face )
+ 	if ( (*face).second == id )
+@@ -274,7 +274,7 @@ namespace Space3D {
+      */
+     uint faceID ( const QString& name ) const
+     {
+-      pair<QString,uint> name_id = PartFactory::instance()->name( name );
++      std::pair<QString,uint> name_id = PartFactory::instance()->name( name );
+       return name_id.second;
+     }
+     /*!
+@@ -282,7 +282,7 @@ namespace Space3D {
+      */
+     uint faceID ( const TopoDS_Face& face ) const
+     {
+-      hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator f =
++      __gnu_cxx::hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator f =
+ 	face_names_.find( face );
+       if ( f != face_names_.end() )
+ 	return (*f).second;
+@@ -297,11 +297,11 @@ namespace Space3D {
+     void addResizeHandle ( uint id, const HandleData& handle );
+ 
+     //! \return an iterator to the beginning of the list of handles.
+-    map<uint, HandleData>::const_iterator handlesBegin ( void ) const
++    std::map<uint, HandleData>::const_iterator handlesBegin ( void ) const
+     { return handles_.begin(); }
+ 
+     //! \return an iterator to the end of the list of handles.
+-    map<uint, HandleData>::const_iterator handlesEnd ( void ) const
++    std::map<uint, HandleData>::const_iterator handlesEnd ( void ) const
+     { return handles_.end(); }
+ 
+     /*!
+@@ -321,11 +321,11 @@ namespace Space3D {
+     void addParameter ( const QString& name, const Parameter& parameter );
+ 
+     //! \return an iterator to the beginning of the list of parameters
+-    map<QString, Parameter>::const_iterator parametersBegin ( void ) const
++    std::map<QString, Parameter>::const_iterator parametersBegin ( void ) const
+     { return  parameters_.begin(); }
+ 
+     //! \return an iterator to the end of the list of parameters
+-    map<QString, Parameter>::const_iterator parametersEnd ( void ) const
++    std::map<QString, Parameter>::const_iterator parametersEnd ( void ) const
+     { return  parameters_.end(); }
+ 
+     /*!
+@@ -345,11 +345,11 @@ namespace Space3D {
+     void addDatum ( const QString& name, const ConstructionDatum* datum );
+ 
+     //! \return an iterator to the beginning of the list of datums.
+-    map<QString, const ConstructionDatum*>::const_iterator datumsBegin ( void) const
++    std::map<QString, const ConstructionDatum*>::const_iterator datumsBegin ( void) const
+     { return datums_.begin(); }
+ 
+     //! \return an iterator to the end of the list of datums.
+-    map<QString, const ConstructionDatum*>::const_iterator datumsEnd ( void ) const
++    std::map<QString, const ConstructionDatum*>::const_iterator datumsEnd ( void ) const
+     { return datums_.end(); }
+ 
+     /*!
+@@ -374,7 +374,7 @@ namespace Space3D {
+      * Update some (or all) the solid parameters at one go.
+      * \param parameters list of parameters to update.
+      */
+-    virtual void updateParameters ( const map<QString,double>& parameters ) = 0;
++    virtual void updateParameters ( const std::map<QString,double>& parameters ) = 0;
+     /*!
+      * Report an adjustment to the n-th handle.
+      * \param id id of adjusted handle.
+@@ -479,17 +479,17 @@ signals:
+     gp_Ax2 grain_csys_;
+ 
+     //! List of the resize handles supplied by this solid.
+-    map<uint, HandleData> handles_;
++    std::map<uint, HandleData> handles_;
+     //! List of dimensional parameters.
+-    map<QString, Parameter> parameters_;
++    std::map<QString, Parameter> parameters_;
+     //! List of construction datum used by this solid.
+-    map<QString, const ConstructionDatum*> datums_;
++    std::map<QString, const ConstructionDatum*> datums_;
+ 
+     //! The mapping the face data structures to their names.
+-    hash_map< TopoDS_Face, uint, lCShapeHasher > face_names_;
++    __gnu_cxx::hash_map< TopoDS_Face, uint, lCShapeHasher > face_names_;
+ 
+     //! The list of handles which are associated with each face.
+-    map<QString, QValueVector<uint> > face_handles_;
++    std::map<QString, QValueVector<uint> > face_handles_;
+ 
+     //! Is this necessary? (probably not...)
+     static uint unique_index_;
+@@ -534,7 +534,7 @@ signals:
+      * Update some (or all) the solid parameters at one go.
+      * \param parameters list of parameters to update.
+      */
+-    void updateParameters ( const map<QString,double>& parameters );
++    void updateParameters ( const std::map<QString,double>& parameters );
+     /*!
+      * Report an adjustment to the n-th handle.
+      * \param id id of adjusted handle.
+@@ -600,7 +600,7 @@ signals:
+      * Update some (or all) the solid parameters at one go.
+      * \param parameters list of parameters to update.
+      */
+-    void updateParameters ( const map<QString,double>& parameters );
++    void updateParameters ( const std::map<QString,double>& parameters );
+     /*!
+      * Report an adjustment to the n-th handle.
+      * \param id id of adjusted handle.
+@@ -665,7 +665,7 @@ signals:
+      * Update some (or all) the solid parameters at one go.
+      * \param parameters list of parameters to update.
+      */
+-    void updateParameters ( const map<QString,double>& parameters );
++    void updateParameters ( const std::map<QString,double>& parameters );
+     /*!
+      * Report an adjustment to the n-th handle.
+      * \param id id of adjusted handle.
+@@ -741,7 +741,7 @@ signals:
+      * Update some (or all) the solid parameters at one go.
+      * \param parameters list of parameters to update.
+      */
+-    void updateParameters ( const map<QString,double>& parameters );
++    void updateParameters ( const std::map<QString,double>& parameters );
+     /*!
+      * Report an adjustment to the n-th handle.
+      * \param id id of adjusted handle.
+@@ -816,7 +816,7 @@ signals:
+      * Update some (or all) the solid parameters at one go.
+      * \param parameters list of parameters to update.
+      */
+-    void updateParameters ( const map<QString,double>& parameters );
++    void updateParameters ( const std::map<QString,double>& parameters );
+     /*!
+      * Report an adjustment to the n-th handle.
+      * \param id id of adjusted handle.
+@@ -881,7 +881,7 @@ signals:
+      * Update some (or all) the solid parameters at one go.
+      * \param parameters list of parameters to update.
+      */
+-    void updateParameters ( const map<QString,double>& parameters );
++    void updateParameters ( const std::map<QString,double>& parameters );
+     /*!
+      * Report an adjustment to the n-th handle.
+      * \param id id of adjusted handle.
+diff -ur -urp lignumCAD/ocsolidview.h ../lignumCAD-1/ocsolidview.h
+--- lignumCAD/ocsolidview.h	2002-11-22 13:37:27.000000000 +0100
++++ ../lignumCAD-1/ocsolidview.h	2010-05-29 18:17:32.000000000 +0200
+@@ -70,7 +70,7 @@ namespace Space3D {
+     OCSolid* solid_;
+     OCSolidView* solid_view_;
+ 
+-    map< QString, double > old_parameters_;
++    std::map< QString, double > old_parameters_;
+ 
+     GLuint drag_handle_;
+     Point start_pnt_;
+@@ -130,19 +130,19 @@ namespace Space3D {
+      * \param entity entity selected for in view.
+      * \return string representing selection.
+      */
+-    QString selectionText ( const vector<GLuint>& selection_name,
++    QString selectionText ( const std::vector<GLuint>& selection_name,
+ 			    SelectionEntity entity ) const;
+ 
+     View* lookup ( QStringList& /*path_components*/ ) const
+     { return 0; }
+-    void lookup ( QValueVector<uint>& /*id_path*/, vector<GLuint>& /*name_path*/ )
++    void lookup ( QValueVector<uint>& /*id_path*/, std::vector<GLuint>& /*name_path*/ )
+       const
+     {}
+ 
+     void setHighlighted ( bool highlight, SelectionEntity entity,
+-			  const vector<GLuint>& items );
++			  const std::vector<GLuint>& items );
+     void setActivated( bool activate, SelectionEntity entity,
+-		       const vector<GLuint>& items );
++		       const std::vector<GLuint>& items );
+ 
+     InputObject* createInput ( void ) { return 0; }
+     InputObject* modifyInput ( void ) { return &modify_input_; }
+diff -ur -urp lignumCAD/oglpaintdevice.cpp ../lignumCAD-1/oglpaintdevice.cpp
+--- lignumCAD/oglpaintdevice.cpp	2002-12-05 15:50:37.000000000 +0100
++++ ../lignumCAD-1/oglpaintdevice.cpp	2010-07-09 01:10:19.000000000 +0200
+@@ -27,17 +27,17 @@
+ #include "OGLFT.h"
+ #include "oglpaintdevice.h"
+ 
+-ostream& operator<< ( ostream& o, const QPoint& p )
++std::ostream& operator<< ( std::ostream& o, const QPoint& p )
+ {
+   return o << "[" << p.x() << ", " << p.y() << "]";
+ }
+ 
+-ostream& operator<< ( ostream& o, const QColor& c )
++std::ostream& operator<< ( std::ostream& o, const QColor& c )
+ {
+   return o << "[" << c.red() << ", " << c.green() << ", " << c.blue() << "]";
+ }
+ 
+-ostream& operator<< ( ostream& o, const QBrush& b )
++std::ostream& operator<< ( std::ostream& o, const QBrush& b )
+ {
+   o << "style ";
+   switch ( b.style() ) {
+@@ -51,7 +52,7 @@ ostream& operator<< ( ostream& o, const 
+   return o << ", color " << b.color();
+ }
+ 
+-ostream& operator<< ( ostream& o, const QPen& p )
++std::ostream& operator<< ( std::ostream& o, const QPen& p )
+ {
+   o << "style ";
+   switch( p.style() ) {
+@@ -69,17 +70,17 @@ ostream& operator<< ( ostream& o, const 
+   return o << ", color " << p.color() << ", width " << p.width();
+ }
+ 
+-ostream& operator<< ( ostream& o, const QFont& f )
++std::ostream& operator<< ( std::ostream& o, const QFont& f )
+ {
+   return o << f.rawName().latin1();
+ }
+ 
+-ostream& operator<< ( ostream& o, const QRect& r )
++std::ostream& operator<< ( std::ostream& o, const QRect& r )
+ {
+   return o << r.left() << ", " << r.top() << "; " << r.right() << ", " << r.bottom();
+ }
+ 
+-ostream& operator<< ( ostream& o, const QRegion& r )
++std::ostream& operator<< ( std::ostream& o, const QRegion& r )
+ {
+   QMemArray<QRect> rects( r.rects() );
+   for ( uint i = 0; i < rects.size(); i++ )
+@@ -87,7 +88,7 @@ ostream& operator<< ( ostream& o, const 
+   return o;
+ }
+ 
+-ostream& operator<< ( ostream& o, const QWMatrix& m )
++std::ostream& operator<< ( std::ostream& o, const QWMatrix& m )
+ {
+   o << "\t" << m.m11() << ", " << m.m12() << ": " << m.dx() << endl;
+   o << "\t" << m.m21() << ", " << m.m22() << ": " << m.dy() << endl;
+diff -ur -urp lignumCAD/pageview.cpp ../lignumCAD-1/pageview.cpp
+--- lignumCAD/pageview.cpp	2002-12-08 20:18:16.000000000 +0100
++++ ../lignumCAD-1/pageview.cpp	2010-05-29 19:10:12.000000000 +0200
+@@ -365,9 +365,9 @@ View* PageView::lookup ( QStringList& pa
+ 
+ // Lookup the OpenGL selection name path for the given object.
+ 
+-vector<GLuint> PageView::lookup ( QValueVector<uint>& id_path ) const
++std::vector<GLuint> PageView::lookup ( QValueVector<uint>& id_path ) const
+ {
+-  vector<GLuint> name_path;
++  std::vector<GLuint> name_path;
+ 
+   QPtrListIterator< FigureViewBase > fv( figure_views_ );
+ 
+@@ -652,7 +652,7 @@ void PageView::activateFigure ( FigureVi
+   deactivateFigures();
+ 
+   SelectedNames::iterator f =
+-    activated_.insert( pair<GLfloat, vector<GLuint> >( 0., vector<GLuint>(1) ) );
++    activated_.insert( std::pair<GLfloat, std::vector<GLuint> >( 0., std::vector<GLuint>(1) ) );
+   (*f).second[0] = figure_view->selectionName();
+   
+   figure_view->setActivated( true, selectionType().entity_, (*f).second );
+@@ -666,9 +666,9 @@ void PageView::activateFigure ( FigureVi
+ 
+ // Programmatically activate (pick, actually) the figure given by the GL path.
+ 
+-void PageView::activateFigure ( const vector<GLuint>& selection_name )
++void PageView::activateFigure ( const std::vector<GLuint>& selection_name )
+ {
+-  activated_.insert( pair<GLfloat, vector<GLuint> >( 0., selection_name ) );
++  activated_.insert( std::pair<GLfloat, std::vector<GLuint> >( 0., selection_name ) );
+ 
+   FigureViewBase* figure_view = figure_selection_names_[ selection_name[0] ];
+   
+@@ -691,7 +691,7 @@ void PageView::deactivateFigure ( GLuint
+ 
+   for ( ; f != activated_.end(); ++f ) {
+     if ( (*f).second[0] == figure ) {
+-      vector<GLuint>::const_iterator g = find( (*f).second.begin(),
++      std::vector<GLuint>::const_iterator g = find( (*f).second.begin(),
+ 					       (*f).second.end(), geometry );
+       if ( g != (*f).second.end() ) {
+ 	figure_selection_names_[ (*f).second[0] ]->setActivated( false,
+@@ -714,7 +714,7 @@ void PageView::deactivateFigure ( GLuint
+ 
+ // Turn off the given figure (geometry, etc...)
+ 
+-void PageView::deactivateFigure ( const vector<GLuint>& selection_name )
++void PageView::deactivateFigure ( const std::vector<GLuint>& selection_name )
+ {
+   if ( selection_name.empty() ) return;
+ 
+diff -ur -urp lignumCAD/part.cpp ../lignumCAD-1/part.cpp
+--- lignumCAD/part.cpp	2002-12-02 23:59:54.000000000 +0100
++++ ../lignumCAD-1/part.cpp	2010-05-29 19:08:00.000000000 +0200
+@@ -331,24 +331,24 @@ Space3D::OCSolid* PartFactory::create ( 
+ 
+ // Return a name and id for a geometry item.
+ 
+-pair<QString,uint> PartFactory::name ( const QString& suggestion )
++std::pair<QString,uint> PartFactory::name ( const QString& suggestion )
+ {
+   // If there's no suggestion, make something completely up.
+   if ( suggestion.isEmpty() ) {
+     QString name = QString( "n[%1]" ).arg( ++unique_index_ );
+     uint id = ++unique_id_;
+-    pair<QString,uint> name_id( name, id );
++    std::pair<QString,uint> name_id( name, id );
+     names_.insert( name_id );
+     return name_id;
+   }
+ 
+   // If it's already there, return that.
+-  map<QString,uint>::const_iterator entry = names_.find( suggestion );
++  std::map<QString,uint>::const_iterator entry = names_.find( suggestion );
+   if ( entry != names_.end() ) {
+     return *entry;
+   }
+   // Otherwise, use the suggested name but with a unique id.
+-  pair<QString,uint> name_id( suggestion, ++unique_id_ );
++  std::pair<QString,uint> name_id( suggestion, ++unique_id_ );
+   names_.insert( name_id );
+ 
+   return name_id;
+@@ -358,7 +358,7 @@ pair<QString,uint> PartFactory::name ( c
+ 
+ QString PartFactory::name ( uint id )
+ {
+-  map<QString,uint>::const_iterator entry = names_.begin();
++  std::map<QString,uint>::const_iterator entry = names_.begin();
+   for ( ; entry != names_.end(); ++entry )
+     if ( (*entry).second == id )
+       return (*entry).first;
+diff -ur -urp lignumCAD/part.h ../lignumCAD-1/part.h
+--- lignumCAD/part.h	2002-11-26 23:30:46.000000000 +0100
++++ ../lignumCAD-1/part.h	2010-05-29 18:08:32.000000000 +0200
+@@ -284,7 +284,7 @@ public:
+    * invent a unique name.
+    * \return the matched set of name and integer id.
+    */
+-  pair< QString, uint > name ( const QString& suggestion );
++  std::pair< QString, uint > name ( const QString& suggestion );
+ 
+   /*!
+    * Look up the name corresponding to this id.
+@@ -303,7 +303,7 @@ private:
+   //! List of parts in the library.
+   QPtrList< PartMetadata > part_data_;
+   //! Global list of geometry names and ids.
+-  map<QString, uint> names_;
++  std::map<QString, uint> names_;
+   //! Last unique name index used.
+   uint unique_index_;
+   //! Last unique id used.
+diff -ur -urp lignumCAD/rectangleview.h ../lignumCAD-1/rectangleview.h
+--- lignumCAD/rectangleview.h	2002-11-21 17:19:37.000000000 +0100
++++ ../lignumCAD-1/rectangleview.h	2010-05-29 16:26:14.000000000 +0200
+@@ -158,7 +158,7 @@ namespace Space2D {
+     QIntDict< GraphicsView > rectangle_objects_;
+     QIntDict< DimensionView > dimensionview_objects_;
+ 
+-    map< int, lC::ValidDelta( Rectangle::* ) ( const Point&, Point& )> adjustments_;
++    std::map< int, lC::ValidDelta( Rectangle::* ) ( const Point&, Point& )> adjustments_;
+ 
+     //! Optional style for the rectangle. Otherwise inherits page default.
+     Style* style_;
+@@ -196,14 +196,14 @@ namespace Space2D {
+     QString name ( void ) const;
+     QString type ( void ) const;
+     DBURL dbURL ( void ) const;
+-    QString selectionText ( const vector<GLuint>& selection_name,
++    QString selectionText ( const std::vector<GLuint>& selection_name,
+ 			    SelectionEntity entity ) const;
+     View* lookup ( QStringList& path_components ) const;
+ 
+     void setHighlighted ( bool highlight, SelectionEntity entity,
+-			  const vector<GLuint>& items );
++			  const std::vector<GLuint>& items );
+     void setActivated ( bool activate, SelectionEntity entity,
+-			const vector<GLuint>& items );
++			const std::vector<GLuint>& items );
+ 
+     uint dimensionPickCount ( void ) const { return 2; }
+     void setDimensionView ( const QDomElement& xml_rep );
+diff -ur -urp lignumCAD/referencelineview.cpp ../lignumCAD-1/referencelineview.cpp
+--- lignumCAD/referencelineview.cpp	2002-12-04 14:47:01.000000000 +0100
++++ ../lignumCAD-1/referencelineview.cpp	2010-05-29 19:22:23.000000000 +0200
+@@ -333,7 +333,7 @@ namespace Space2D {
+ 	dynamic_cast< FigureView* >( reference_line_view_->parent()->
+ 				     figureSelectionNames()[ (*f).second[0] ] );
+ 
+-      vector<GLuint>::const_iterator g;
++      std::vector<GLuint>::const_iterator g;
+ 
+       for ( g = (*f).second.begin(); g != (*f).second.end(); ++g ) {
+ 
+@@ -570,7 +570,7 @@ namespace Space2D {
+ 
+       if ( fv == reference_line_view_ ) continue;
+ 
+-      vector<GLuint>::const_iterator g;
++      std::vector<GLuint>::const_iterator g;
+ 
+       for ( g = (*f).second.begin(); g != (*f).second.end(); ++g ) {
+ 
+@@ -1068,7 +1068,7 @@ namespace Space2D {
+     return reference_line_->dbURL();
+   }
+ 
+-  QString ReferenceLineView::selectionText ( const vector<GLuint>&
++  QString ReferenceLineView::selectionText ( const std::vector<GLuint>&
+ 					     /*selection_name*/,
+ 					     SelectionEntity /*entity*/ ) const
+   {
+@@ -1099,7 +1099,7 @@ namespace Space2D {
+   }
+ 
+   void ReferenceLineView::setHighlighted( bool highlight, SelectionEntity entity,
+-					  const vector<GLuint>& items )
++					  const std::vector<GLuint>& items )
+   {
+     if (entity == FIGURE ) {
+       DimensionView* dmv = 0;
+@@ -1119,7 +1119,7 @@ namespace Space2D {
+   }
+ 
+   void ReferenceLineView::setActivated( bool activate, SelectionEntity entity,
+-					const vector<GLuint>& items )
++					const std::vector<GLuint>& items )
+   {
+     if ( entity == FIGURE ) {
+       DimensionView* dmv = 0;
+diff -ur -urp lignumCAD/referencelineview.h ../lignumCAD-1/referencelineview.h
+--- lignumCAD/referencelineview.h	2002-11-20 21:13:27.000000000 +0100
++++ ../lignumCAD-1/referencelineview.h	2010-05-29 16:26:46.000000000 +0200
+@@ -150,14 +150,14 @@ namespace Space2D {
+     QString name ( void ) const;
+     QString type ( void ) const;
+     DBURL dbURL ( void ) const;
+-    QString selectionText ( const vector<GLuint>& selection_name,
++    QString selectionText ( const std::vector<GLuint>& selection_name,
+ 			    SelectionEntity entity ) const;
+     View* lookup ( QStringList& path_components ) const;
+ 
+     void setHighlighted( bool highlight, SelectionEntity entity,
+-			 const vector<GLuint>& items );
++			 const std::vector<GLuint>& items );
+     void setActivated( bool activate, SelectionEntity entity,
+-		       const vector<GLuint>& items );
++		       const std::vector<GLuint>& items );
+ 
+     InputObject* createInput ( void ) { return &create_input_; }
+     InputObject* modifyInput ( void );
+diff -ur -urp lignumCAD/subassemblyview.h ../lignumCAD-1/subassemblyview.h
+--- lignumCAD/subassemblyview.h	2002-11-13 20:12:06.000000000 +0100
++++ ../lignumCAD-1/subassemblyview.h	2010-05-29 18:55:29.000000000 +0200
+@@ -65,17 +65,17 @@ public:
+    * \param entity entity selected for in view.
+    * \return string representing selection.
+    */
+-  QString selectionText ( const vector<GLuint>& selection_name,
++  QString selectionText ( const std::vector<GLuint>& selection_name,
+ 			  SelectionEntity entity ) const;
+   View* lookup ( QStringList& path_components ) const;
+-  void lookup ( QValueVector<uint>& id_path, vector<GLuint>& name_path ) const;
+-  QString geometry ( const vector<GLuint>& selection_name ) const;
+-  QValueVector<uint> geomPath ( const vector<GLuint>& selection_name ) const;
++  void lookup ( QValueVector<uint>& id_path, std::vector<GLuint>& name_path ) const;
++  QString geometry ( const std::vector<GLuint>& selection_name ) const;
++  QValueVector<uint> geomPath ( const std::vector<GLuint>& selection_name ) const;
+ 
+   void setHighlighted ( bool highlight, SelectionEntity entity,
+-			const vector<GLuint>& items );
++			const std::vector<GLuint>& items );
+   void setActivated( bool activate, SelectionEntity entity,
+-		     const vector<GLuint>& items );
++		     const std::vector<GLuint>& items );
+ 
+   InputObject* createInput ( void ) { return 0; }
+   InputObject* modifyInput ( void );
