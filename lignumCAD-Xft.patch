@@ -1,0 +1,52 @@
+diff -urp lignumCAD-frb/xftname.c lignumCAD/xftname.c
+--- lignumCAD-frb/xftname.c	2010-05-12 09:54:22.000000000 +0200
++++ lignumCAD/xftname.c	2010-07-11 17:03:21.000000000 +0200
+@@ -69,7 +69,7 @@ XftNameGetType (const char *object)
+     
+     for (i = 0; i < NUM_OBJECT_TYPES; i++)
+     {
+-	if (!_XftStrCmpIgnoreCase (object, _XftObjectTypes[i].object))
++	if (!FcStrCmpIgnoreCase (object, _XftObjectTypes[i].object))
+ 	    return &_XftObjectTypes[i];
+     }
+     return 0;
+@@ -110,7 +110,7 @@ _XftNameConstantLookup (char *string)
+   unsigned int	i;
+     
+     for (i = 0; i < NUM_XFT_CONSTANTS; i++)
+-	if (!_XftStrCmpIgnoreCase (string, XftConstants[i].name))
++	if (!FcStrCmpIgnoreCase (string, XftConstants[i].name))
+ 	    return &XftConstants[i];
+     return 0;
+ }
+@@ -128,6 +128,30 @@ XftNameConstant (char *string, int *resu
+     return False;
+ }
+ 
++XftDefaultParseBool (char *v)
++{
++    char    c0, c1;
++
++    c0 = *v;
++    if (isupper ((int)c0))
++        c0 = tolower (c0);
++    if (c0 == 't' || c0 == 'y' || c0 == '1')
++        return 1;
++    if (c0 == 'f' || c0 == 'n' || c0 == '0')
++        return 0;
++    if (c0 == 'o')
++    {
++        c1 = v[1];
++        if (isupper ((int)c1))
++            c1 = tolower (c1);
++        if (c1 == 'n')
++            return 1;
++        if (c1 == 'f')
++            return 0;
++    }
++    return -1;
++}
++
+ static XftValue
+ _XftNameConvert (XftType type, char *string, XftMatrix *m)
+ {
