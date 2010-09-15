@@ -1,487 +1,487 @@
-diff -urp lignumCAD.pld2/assemblyview.cpp lignumCAD.pld2a/assemblyview.cpp
---- lignumCAD.pld2/assemblyview.cpp	2010-09-15 23:30:06.000000000 +0200
-+++ lignumCAD.pld2a/assemblyview.cpp	2010-09-15 19:08:46.000000000 +0200
-@@ -484,11 +484,7 @@ public:
+diff -rpu lignumCAD.pld2a/assemblyview.cpp lignumCAD.pld/assemblyview.cpp
+--- lignumCAD.pld2a/assemblyview.cpp	2010-09-15 19:08:46.000000000 +0200
++++ lignumCAD.pld/assemblyview.cpp	2010-09-15 23:40:39.000000000 +0200
+@@ -484,7 +484,11 @@ public:
        assembly_view_->view()->
  	setCursor( CursorFactory::instance().
  		   cursor( CursorFactory::ASSEMBLY_CONSTRAINTPLUS ) );
--    case ConstraintComplete:
--       break;
--    case PlacementComplete:
--       break;
--   }
-+    }
+-    }
++    case ConstraintComplete:
++       break;
++    case PlacementComplete:
++       break;
++   }
    }
    /*!
     * When changing the current page remove the context dialog action and
-@@ -577,11 +573,6 @@ public:
+@@ -573,6 +577,11 @@ public:
  
      case Invalid:
        return false;		// Try again.
--
--    case ConstraintComplete:
--      return false;		// Try again.
--    case PlacementComplete:
--      return false;		// Try again.
++
++    case ConstraintComplete:
++      return false;		// Try again.
++    case PlacementComplete:
++      return false;		// Try again.
      }
  
      // The constraint (and possibly the placement) is complete. Now
-@@ -804,11 +795,6 @@ public:
+@@ -795,6 +804,11 @@ public:
        assembly_view_->view()->
  	setCursor( CursorFactory::instance().
  		   cursor( CursorFactory::ASSEMBLY_CONSTRAINTPLUS ) );
--
--    case ConstraintComplete:
--      break;
--    case PlacementComplete:
--      break;
++
++    case ConstraintComplete:
++      break;
++    case PlacementComplete:
++      break;
      }
    }
    /*!
-@@ -899,11 +885,6 @@ public:
+@@ -885,6 +899,11 @@ public:
  
      case Invalid:
        return false;		// Try again.
--
--    case ConstraintComplete:
--      return false;		// Try again.
--    case PlacementComplete:
--       return false;		// Try again.
++
++    case ConstraintComplete:
++      return false;		// Try again.
++    case PlacementComplete:
++       return false;		// Try again.
      }
  
      // Prompt for the size of the offset.
-diff -urp lignumCAD.pld2/constants.h lignumCAD.pld2a/constants.h
---- lignumCAD.pld2/constants.h	2010-09-15 23:30:06.000000000 +0200
-+++ lignumCAD.pld2a/constants.h	2010-09-15 20:07:16.000000000 +0200
-@@ -262,10 +262,6 @@ namespace lC {
+diff -rpu lignumCAD.pld2a/constants.h lignumCAD.pld/constants.h
+--- lignumCAD.pld2a/constants.h	2010-09-15 20:35:32.000000000 +0200
++++ lignumCAD.pld/constants.h	2010-09-15 23:40:39.000000000 +0200
+@@ -262,6 +262,10 @@ namespace lC {
  	return "SOLID";
        case TEXTURED:
  	return "TEXTURED";
--      case HIGHLIGHTS:
--	return "HIGHLIGHTS";
--      case PARENT:
--	return "PARENT";
++      case HIGHLIGHTS:
++	return "HIGHLIGHTS";
++      case PARENT:
++	return "PARENT";
        }
  
        return "PARENT";
-@@ -328,8 +324,6 @@ namespace lC {
+@@ -324,6 +328,8 @@ namespace lC {
  	return "DASHDOT";
        case DASHDOTDOT:
  	return "DASHDOTDOT";
--      case SOLID:
--	return "SOLID";
++      case SOLID:
++	return "SOLID";
        }
        return "SOLID";
      }
-diff -urp lignumCAD.pld2/dimension.h lignumCAD.pld2a/dimension.h
---- lignumCAD.pld2/dimension.h	2010-09-15 23:30:06.000000000 +0200
-+++ lignumCAD.pld2a/dimension.h	2010-09-15 20:09:15.000000000 +0200
-@@ -171,8 +171,6 @@ namespace Space2D {
+diff -rpu lignumCAD.pld2a/dimension.h lignumCAD.pld/dimension.h
+--- lignumCAD.pld2a/dimension.h	2002-09-30 21:54:34.000000000 +0200
++++ lignumCAD.pld/dimension.h	2010-09-15 23:40:39.000000000 +0200
+@@ -171,6 +171,8 @@ namespace Space2D {
        return "EXTERIOR_END0";
      case Dimension::EXTERIOR_END1:
        return "EXTERIOR_END1";
--    case Dimension::INTERIOR:
--      return "INTERIOR";
++    case Dimension::INTERIOR:
++      return "INTERIOR";
      }
      return "INTERIOR";
    }
-@@ -345,8 +343,6 @@ namespace Space3D {
+@@ -343,6 +345,8 @@ namespace Space3D {
        return "EXTERIOR_END0";
      case Dimension::EXTERIOR_END1:
        return "EXTERIOR_END1";
--    case Dimension::INTERIOR:
--      return "INTERIOR";
++    case Dimension::INTERIOR:
++      return "INTERIOR";
      }
      return "INTERIOR";
    }
-diff -urp lignumCAD.pld2/ocsoliddraw.cpp lignumCAD.pld2a/ocsoliddraw.cpp
---- lignumCAD.pld2/ocsoliddraw.cpp	2010-09-15 23:30:06.000000000 +0200
-+++ lignumCAD.pld2a/ocsoliddraw.cpp	2010-09-15 22:22:04.000000000 +0200
-@@ -643,19 +643,11 @@ namespace Space3D {
+diff -rpu lignumCAD.pld2a/ocsoliddraw.cpp lignumCAD.pld/ocsoliddraw.cpp
+--- lignumCAD.pld2a/ocsoliddraw.cpp	2010-09-15 22:10:59.000000000 +0200
++++ lignumCAD.pld/ocsoliddraw.cpp	2010-09-15 23:40:39.000000000 +0200
+@@ -643,11 +643,19 @@ namespace Space3D {
  			   lC::Render::Mode mode, bool draw_parameters ) const
    {
      switch ( style ) {
--    case lC::Render::PARENT:
--    case lC::Render::STIPPLE:
--      break;
++    case lC::Render::PARENT:
++    case lC::Render::STIPPLE:
++      break;
      case lC::Render::WIREFRAME:
        switch ( entity ) {
--      case EDGE:
--      case VERTEX:
--	break;
++      case EDGE:
++      case VERTEX:
++	break;
        case NONE:
        case FIGURE:
  	switch ( mode ) {
--	case lC::Render::INVISIBLE:
--	  break;
++	case lC::Render::INVISIBLE:
++	  break;
  	case lC::Render::REGULAR:
  	  glColor3ubv( lC::qCubv( view_->geometryColor() ) );
  	  glCallList( edge_name_ );
-@@ -674,10 +666,6 @@ namespace Space3D {
+@@ -666,6 +674,10 @@ namespace Space3D {
  
  	  switch ( (*wv).second.mode() ) {
  
--	  case lC::Render::INVISIBLE:
--	  case lC::Render::HIGHLIGHTED:
--	  case lC::Render::ACTIVATED:
--	    break;
++	  case lC::Render::INVISIBLE:
++	  case lC::Render::HIGHLIGHTED:
++	  case lC::Render::ACTIVATED:
++	    break;
  	  case lC::Render::REGULAR:
  	    glCallList( (*wv).second.displayList() );
  	    break;
-@@ -690,9 +678,6 @@ namespace Space3D {
+@@ -678,6 +690,9 @@ namespace Space3D {
  	for ( ; wv != wire_views_.end(); ++wv ) {
  
  	  switch ( (*wv).second.mode() ) {
--	  case lC::Render::INVISIBLE:
--	  case lC::Render::REGULAR:
--	    break;
++	  case lC::Render::INVISIBLE:
++	  case lC::Render::REGULAR:
++	    break;
  	  case lC::Render::HIGHLIGHTED:
  	  case lC::Render::ACTIVATED:
  	    glCallList( (*wv).second.displayList() );
-@@ -719,9 +704,6 @@ namespace Space3D {
+@@ -704,6 +719,9 @@ namespace Space3D {
        for ( ; wv != wire_views_.end(); ++wv ) {
  
  	switch ( (*wv).second.mode() ) {
--	case lC::Render::INVISIBLE:
--	case lC::Render::REGULAR:
--	  break;
++	case lC::Render::INVISIBLE:
++	case lC::Render::REGULAR:
++	  break;
  	case lC::Render::HIGHLIGHTED:
  	case lC::Render::ACTIVATED:
  	  glCallList( (*wv).second.displayList() );
-@@ -745,16 +727,11 @@ namespace Space3D {
+@@ -727,11 +745,16 @@ namespace Space3D {
  
        switch ( entity ) {
  
--      case EDGE:
--      case VERTEX:
--	break;
++      case EDGE:
++      case VERTEX:
++	break;
        case NONE:
        case FIGURE:
  
  	switch ( mode ) {
  
--	case lC::Render::INVISIBLE:
--	  break;
++	case lC::Render::INVISIBLE:
++	  break;
  	case lC::Render::REGULAR:
  	  glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE,
  			lC::qCfv( color ) );
-@@ -777,8 +754,6 @@ namespace Space3D {
+@@ -754,6 +777,8 @@ namespace Space3D {
  
  	  switch ( (*fv).second.mode() ) {
  
--	  case lC::Render::INVISIBLE:
--	    break;
++	  case lC::Render::INVISIBLE:
++	    break;
  	  case lC::Render::REGULAR:
  	    glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE,
  			  lC::qCfv( color ) );
-@@ -813,16 +788,11 @@ namespace Space3D {
+@@ -788,11 +813,16 @@ namespace Space3D {
  
        switch ( entity ) {
  
--      case EDGE:
--      case VERTEX:
--	break;
++      case EDGE:
++      case VERTEX:
++	break;
        case NONE:
        case FIGURE:
  
  	switch ( mode ) {
  
--	case lC::Render::INVISIBLE:
--	  break;
++	case lC::Render::INVISIBLE:
++	  break;
  	case lC::Render::REGULAR:
  	  glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, material_std_);
  	  for ( ; fv != face_views_.end(); ++fv ) {
-@@ -844,8 +814,6 @@ namespace Space3D {
+@@ -814,6 +844,8 @@ namespace Space3D {
  
  	  switch ( (*fv).second.mode() ) {
  
--	  case lC::Render::INVISIBLE:
--	    break;
++	  case lC::Render::INVISIBLE:
++	    break;
  	  case lC::Render::REGULAR:
  	    glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, material_std_);
  	    glCallList( (*fv).second.displayList() );
-@@ -871,9 +839,6 @@ namespace Space3D {
+@@ -839,6 +871,9 @@ namespace Space3D {
        for ( ; wv != wire_views_.end(); ++wv ) {
  
  	switch ( (*wv).second.mode() ) {
--	case lC::Render::INVISIBLE:
--	case lC::Render::REGULAR:
--	  break;
++	case lC::Render::INVISIBLE:
++	case lC::Render::REGULAR:
++	  break;
  	case lC::Render::HIGHLIGHTED:
  	case lC::Render::ACTIVATED:
  	  glCallList( (*wv).second.displayList() );
-@@ -887,15 +852,10 @@ namespace Space3D {
+@@ -852,10 +887,15 @@ namespace Space3D {
  
      switch ( entity ) {
  
--    case EDGE:
--    case VERTEX:
--      break;
++    case EDGE:
++    case VERTEX:
++      break;
      case NONE:
      case FIGURE:
        switch ( mode ) {
--      case lC::Render::INVISIBLE:
--      case lC::Render::REGULAR:
--        break;
-+
+-
++      case lC::Render::INVISIBLE:
++      case lC::Render::REGULAR:
++        break;
        case lC::Render::HIGHLIGHTED:
        case lC::Render::ACTIVATED:
  	std::map<uint, HandleData>::const_iterator handle = solid_->handlesBegin();
-@@ -916,9 +876,6 @@ namespace Space3D {
+@@ -876,6 +916,9 @@ namespace Space3D {
  	std::map<GLuint,GV>::const_iterator fv = face_views_.find((*fid).second);
  	if ( fv != face_views_.end() ) {
  	  switch ( (*fv).second.mode() ) {
--	  case lC::Render::INVISIBLE:
--	  case lC::Render::REGULAR:
--	    break;
++	  case lC::Render::INVISIBLE:
++	  case lC::Render::REGULAR:
++	    break;
  	  case lC::Render::HIGHLIGHTED:
  	  case lC::Render::ACTIVATED:
  	    QValueVector<uint> handles( solid_->
-@@ -946,10 +903,6 @@ namespace Space3D {
+@@ -903,6 +946,10 @@ namespace Space3D {
        case NONE:
        case FIGURE:
  	switch ( mode ) {
--	case lC::Render::INVISIBLE:
--	case lC::Render::REGULAR:
--	case lC::Render::HIGHLIGHTED:
--	  break;
++	case lC::Render::INVISIBLE:
++	case lC::Render::REGULAR:
++	case lC::Render::HIGHLIGHTED:
++	  break;
  	case lC::Render::ACTIVATED:
  	  std::map<GLuint,Dimension>::const_iterator dimension =
  	    dimension_views_.begin();
-@@ -962,10 +915,6 @@ namespace Space3D {
+@@ -915,6 +962,10 @@ namespace Space3D {
  	    (*datum_view).second->draw( view_ );
  	  break;
  	}
--      case FACE:
--      case EDGE:
--      case VERTEX:
--	break;
++      case FACE:
++      case EDGE:
++      case VERTEX:
++	break;
        }
      }
    }
-@@ -1008,22 +957,15 @@ namespace Space3D {
+@@ -957,15 +1008,22 @@ namespace Space3D {
  	  }
  	}
        }
--      case lC::Render::INVISIBLE:
--      case lC::Render::REGULAR:
--	break;
++      case lC::Render::INVISIBLE:
++      case lC::Render::REGULAR:
++	break;
        }
        break;
--     case FACE:
-+    case FACE:
+-    case FACE:
++     case FACE:
        for ( ; fv != face_views_.end(); ++fv ) {
  	glPushName( (*fv).first );
  	glCallList( (*fv).second.displayList() );
  	glPopName();
        }
        break;
--    case NONE:
--    case EDGE:
--    case VERTEX:
--      break;
++    case NONE:
++    case EDGE:
++    case VERTEX:
++      break;
      }
    }
  
-@@ -1055,10 +997,6 @@ namespace Space3D {
+@@ -997,6 +1055,10 @@ namespace Space3D {
  	  face_views_[ items[1] ].setMode( lC::Render::REGULAR );
  	}
        }
--    case NONE:
--    case EDGE:
--    case VERTEX:
--      break;
++    case NONE:
++    case EDGE:
++    case VERTEX:
++      break;
      }
    }
  
-@@ -1095,10 +1033,6 @@ namespace Space3D {
+@@ -1033,6 +1095,10 @@ namespace Space3D {
  	wire_views_[ items[1] ].setMode( lC::Render::REGULAR );
  	face_views_[ items[1] ].setMode( lC::Render::REGULAR );
        }
--    case NONE:
--    case EDGE:
--    case VERTEX:
--      break;
++    case NONE:
++    case EDGE:
++    case VERTEX:
++      break;
      }
    }
  } // End of Space3D namespace
-diff -urp lignumCAD.pld2/ocsolidview.cpp lignumCAD.pld2a/ocsolidview.cpp
---- lignumCAD.pld2/ocsolidview.cpp	2010-09-15 23:30:06.000000000 +0200
-+++ lignumCAD.pld2a/ocsolidview.cpp	2010-09-15 21:29:31.000000000 +0200
-@@ -652,10 +652,6 @@ namespace Space3D {
+diff -rpu lignumCAD.pld2a/ocsolidview.cpp lignumCAD.pld/ocsolidview.cpp
+--- lignumCAD.pld2a/ocsolidview.cpp	2010-09-15 22:16:29.000000000 +0200
++++ lignumCAD.pld/ocsolidview.cpp	2010-09-15 23:40:39.000000000 +0200
+@@ -652,6 +652,10 @@ namespace Space3D {
      QString text;
  
      switch ( entity ) {
--    case NONE:
--    case EDGE:
--    case VERTEX:
--      break;
++    case NONE:
++    case EDGE:
++    case VERTEX:
++      break;
      case FIGURE:
        text = solid_->name(); break;
      case FACE:
-diff -urp lignumCAD.pld2/OGLFT.cpp lignumCAD.pld2a/OGLFT.cpp
---- lignumCAD.pld2/OGLFT.cpp	2010-09-15 23:30:06.000000000 +0200
-+++ lignumCAD.pld2a/OGLFT.cpp	2002-11-21 15:34:26.000000000 +0100
-@@ -1166,14 +1166,10 @@ namespace OGLFT {
+diff -rpu lignumCAD.pld2a/OGLFT.cpp lignumCAD.pld/OGLFT.cpp
+--- lignumCAD.pld2a/OGLFT.cpp	2002-11-21 15:34:26.000000000 +0100
++++ lignumCAD.pld/OGLFT.cpp	2010-09-15 23:40:39.000000000 +0200
+@@ -1166,10 +1166,14 @@ namespace OGLFT {
  	dx = -bbox.x_min_; break;
        case CENTER:
  	dx = -( bbox.x_min_ + bbox.x_max_ ) / 2.; break;
--      case ORIGIN:
--        break;
++      case ORIGIN:
++        break;
        case RIGHT:
  	dx = -bbox.x_max_; break;
        }
        switch ( vertical_justification_ ) {
--      case BASELINE:
--        break;
++      case BASELINE:
++        break;
        case BOTTOM:
  	dy = -bbox.y_min_; break;
        case MIDDLE:
-@@ -1264,14 +1260,10 @@ namespace OGLFT {
+@@ -1260,10 +1264,14 @@ namespace OGLFT {
  	dx = bbox.x_min_; break;
        case CENTER:
  	dx = ( bbox.x_min_ + bbox.x_max_ ) / 2; break;
--      case ORIGIN:
--        break;
++      case ORIGIN:
++        break;
        case RIGHT:
  	dx = bbox.x_max_; break;
        }
        switch ( vertical_justification_ ) {
--      case BASELINE:
--        break;
++      case BASELINE:
++        break;
        case BOTTOM:
  	dy = bbox.y_min_; break;
        case MIDDLE:
-diff -urp lignumCAD.pld2/rectangleview.cpp lignumCAD.pld2a/rectangleview.cpp
---- lignumCAD.pld2/rectangleview.cpp	2010-09-15 23:30:06.000000000 +0200
-+++ lignumCAD.pld2a/rectangleview.cpp	2010-09-15 20:12:55.000000000 +0200
-@@ -1755,12 +1755,6 @@ namespace Space2D {
+diff -rpu lignumCAD.pld2a/rectangleview.cpp lignumCAD.pld/rectangleview.cpp
+--- lignumCAD.pld2a/rectangleview.cpp	2010-09-15 20:29:29.000000000 +0200
++++ lignumCAD.pld/rectangleview.cpp	2010-09-15 23:40:39.000000000 +0200
+@@ -1755,6 +1755,12 @@ namespace Space2D {
      case EDGE:
        text = lC::formatName( rectangle_->name() ) + '/' +
  	lC::formatName( nameOf( selection_name[1] ) );
--    case NONE:
--      break;
--    case FACE:
--      break;
--    case VERTEX:
--      break;
++    case NONE:
++      break;
++    case FACE:
++      break;
++    case VERTEX:
++      break;
      }
  
      return text;
-@@ -2586,8 +2580,6 @@ namespace Space2D {
+@@ -2580,6 +2586,8 @@ namespace Space2D {
  	glLineStipple( 1, 0xf6f6 ); break;
        case lC::Edge::DASHDOTDOT:
  	glLineStipple( 1, 0xeaea ); break;
--      case lC::Edge::SOLID:
--	break;
++      case lC::Edge::SOLID:
++	break;
        }
        stippled = true;
      }
-@@ -4399,8 +4391,6 @@ namespace Space2D {
+@@ -4391,6 +4399,8 @@ namespace Space2D {
      case lC::Rejected:
        x0UpdateName( rectangle_->x0()->name() );
        return;
--    case lC::OK:
--      return;
++    case lC::OK:
++      return;
      }
  
      DBURL old_db_url = rectangle_->x0()->dbURL();
-@@ -4422,8 +4412,6 @@ namespace Space2D {
+@@ -4412,6 +4422,8 @@ namespace Space2D {
      case lC::Rejected:
        y0UpdateName( rectangle_->y0()->name() );
        return;
--    case lC::OK:
--      return;
++    case lC::OK:
++      return;
      }
  
      DBURL old_db_url = rectangle_->y0()->dbURL();
-@@ -4445,8 +4433,6 @@ namespace Space2D {
+@@ -4433,6 +4445,8 @@ namespace Space2D {
      case lC::Rejected:
        x1UpdateName( rectangle_->x1()->name() );
        return;
--    case lC::OK:
--      return;
++    case lC::OK:
++      return;
      }
  
      DBURL old_db_url = rectangle_->x1()->dbURL();
-@@ -4468,8 +4454,6 @@ namespace Space2D {
+@@ -4454,6 +4468,8 @@ namespace Space2D {
      case lC::Rejected:
        y1UpdateName( rectangle_->y1()->name() );
        return;
--    case lC::OK:
--      return;
++    case lC::OK:
++      return;
      }
  
      DBURL old_db_url = rectangle_->y1()->dbURL();
-diff -urp lignumCAD.pld2/sketchview.cpp lignumCAD.pld2a/sketchview.cpp
---- lignumCAD.pld2/sketchview.cpp	2010-09-15 23:30:06.000000000 +0200
-+++ lignumCAD.pld2a/sketchview.cpp	2003-01-03 16:27:17.000000000 +0100
-@@ -474,11 +474,6 @@ void SketchView::startDisplay ( QPopupMe
+diff -rpu lignumCAD.pld2a/sketchview.cpp lignumCAD.pld/sketchview.cpp
+--- lignumCAD.pld2a/sketchview.cpp	2003-01-03 16:27:17.000000000 +0100
++++ lignumCAD.pld/sketchview.cpp	2010-09-15 23:40:39.000000000 +0200
+@@ -474,6 +474,11 @@ void SketchView::startDisplay ( QPopupMe
      context_menu_->setItemChecked( solid_id_, true ); break;
    case lC::Render::TEXTURED:
      context_menu_->setItemChecked( texture_id_, true ); break;
--  case lC::Render::PARENT:
--  case lC::Render::STIPPLE:
--  case lC::Render::HIDDEN:
--  case lC::Render::HIGHLIGHTS:
--    break;
++  case lC::Render::PARENT:
++  case lC::Render::STIPPLE:
++  case lC::Render::HIDDEN:
++  case lC::Render::HIGHLIGHTS:
++    break;
    }
  
    connect( sketch_, SIGNAL( nameChanged( const QString& ) ),
-diff -urp lignumCAD.pld2/units.cpp lignumCAD.pld2a/units.cpp
---- lignumCAD.pld2/units.cpp	2010-09-15 23:30:06.000000000 +0200
-+++ lignumCAD.pld2a/units.cpp	2002-11-20 00:10:17.000000000 +0100
-@@ -607,8 +607,6 @@ public:
+diff -rpu lignumCAD.pld2a/units.cpp lignumCAD.pld/units.cpp
+--- lignumCAD.pld2a/units.cpp	2002-11-20 00:10:17.000000000 +0100
++++ lignumCAD.pld/units.cpp	2010-09-15 23:40:39.000000000 +0200
+@@ -607,6 +607,8 @@ public:
  		   bool /*use_unicode*/ ) const
    {
      switch ( format ) {
--    case FRACTIONAL:
--      break;
++    case FRACTIONAL:
++      break;
      case DECIMAL:
        // Since mm are so small, the number of useful significant digits
        // to the right of the decimal point is much fewer than for the other
-@@ -625,8 +623,6 @@ public:
+@@ -623,6 +625,8 @@ public:
    {
      double value = 0;
      switch ( format ) {
--    case FRACTIONAL:
--      break;
++    case FRACTIONAL:
++      break;
      case DECIMAL:
        value = text.toDouble() / MM_PER_INCH;
        break;
-@@ -652,8 +648,6 @@ public:
+@@ -648,6 +652,8 @@ public:
  		   bool /*use_unicode*/ ) const
    {
      switch ( format ) {
--    case FRACTIONAL:
--      break;
++    case FRACTIONAL:
++      break;
      case DECIMAL:
        // cm...inches...they're about the same, but both the 10cm and 1cm
        // precision steps don't require any signicant digits to the right
-@@ -670,8 +664,6 @@ public:
+@@ -664,6 +670,8 @@ public:
    {
      double value = 0;
      switch ( format ) {
--    case FRACTIONAL:
--      break;
++    case FRACTIONAL:
++      break;
      case DECIMAL:
        value = text.toDouble() / CM_PER_INCH;
        break;
-@@ -697,8 +689,6 @@ public:
+@@ -689,6 +697,8 @@ public:
  		   bool /*use_unicode*/ ) const
    {
      switch ( format ) {
--    case FRACTIONAL:
--      break;
++    case FRACTIONAL:
++      break;
      case DECIMAL:
        // Of course, meters are largest unit we have here, so they need
        // the most significant digits.
-@@ -713,8 +703,6 @@ public:
+@@ -703,6 +713,8 @@ public:
    {
      double value = 0;
      switch ( format ) {
--    case FRACTIONAL:
--      break;
++    case FRACTIONAL:
++      break;
      case DECIMAL:
        value = text.toDouble() / M_PER_INCH;
        break;
