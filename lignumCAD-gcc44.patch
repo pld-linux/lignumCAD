@@ -1,0 +1,12 @@
+diff -urp lignumCAD.pld/openglview.cpp lignumCAD.pld2/openglview.cpp
+--- lignumCAD.pld/openglview.cpp	2002-12-04 15:20:48.000000000 +0100
++++ lignumCAD.pld2/openglview.cpp	2010-09-15 19:58:14.000000000 +0200
+@@ -81,7 +81,7 @@ public:
+       ChangeViewCommand* change_view = dynamic_cast< ChangeViewCommand* >( command);
+ 
+       if ( db_url_ == change_view->db_url_ &&
+-	   old_view_ != change_view->new_view_ ) {
++	   !( old_view_ == change_view->new_view_ )) {
+ 	new_view_ = change_view->new_view_;
+ 	return true;
+       }

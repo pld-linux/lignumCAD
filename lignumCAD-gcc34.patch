@@ -1,0 +1,39 @@
+diff -urp lignumCAD.pld/openglbase.h lignumCAD.pld2/openglbase.h
+--- lignumCAD.pld/openglbase.h	2002-09-11 22:53:07.000000000 +0200
++++ lignumCAD.pld2/openglbase.h	2010-09-15 19:36:16.000000000 +0200
+@@ -60,10 +60,10 @@ struct FaceData {
+   QRgb color_;
+ 
+   //! Horizontal justification of rendered text. Default is ORIGIN.
+-  enum lC::HorizontalJustification horizontal_justification_;
++  lC::HorizontalJustification horizontal_justification_;
+ 
+   //! Vertical justification of rendered text. Default is BASELINE.
+-  enum lC::VerticalJustification vertical_justification_;
++  lC::VerticalJustification vertical_justification_;
+ 
+   //! Scale of the view (matters to outline faces).
+   Ratio scale_;
+diff -urp lignumCAD.pld/style.h lignumCAD.pld2/style.h
+--- lignumCAD.pld/style.h	2002-09-25 15:36:30.000000000 +0200
++++ lignumCAD.pld2/style.h	2010-09-15 20:11:42.000000000 +0200
+@@ -107,7 +107,7 @@ public:
+ 
+ private:
+   //! The general style.
+-  enum lC::Render::Style style_;
++  lC::Render::Style style_;
+   //! A custom edge stipple style.
+   enum lC::Edge::Style edge_;
+   //! Custom outline color.
+diff -urp lignumCAD.pld/viewdata.h lignumCAD.pld2/viewdata.h
+--- lignumCAD.pld/viewdata.h	2002-09-13 15:29:34.000000000 +0200
++++ lignumCAD.pld2/viewdata.h	2010-09-15 19:35:49.000000000 +0200
+@@ -27,7 +27,6 @@
+ #include "vectoralgebra.h"
+ 
+ class QDomElement;
+-enum Space;
+ 
+ /*!
+  * Save the information which (minimally) describes the current

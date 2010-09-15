@@ -1,0 +1,24 @@
+diff -urp lignumCAD.pld/openglbase.h lignumCAD.pld2/openglbase.h
+--- lignumCAD.pld/openglbase.h	2002-09-11 22:53:07.000000000 +0200
++++ lignumCAD.pld2/openglbase.h	2010-09-15 19:36:16.000000000 +0200
+@@ -383,7 +383,7 @@ private:
+    * \param a value to convert.
+    * \return smallest power of two which is greater than or equal to a.
+    */
+-  uint OpenGLBase::nearestPowerCeil ( unsigned int a );
++  uint nearestPowerCeil ( unsigned int a );
+ };
+ 
+ /*!
+diff -urp lignumCAD.pld/openglview.cpp lignumCAD.pld2/openglview.cpp
+--- lignumCAD.pld/openglview.cpp	2002-12-04 15:20:48.000000000 +0100
++++ lignumCAD.pld2/openglview.cpp	2010-09-15 19:58:14.000000000 +0200
+@@ -53,7 +53,7 @@ public:
+   /*!
+    * Constructor takes the usual arguments defining the old and new state.
+    */
+-  ChangeViewCommand::ChangeViewCommand ( const QString& name,
++  ChangeViewCommand ( const QString& name,
+ 					 const PageView* page_view,
+ 					 const ViewData& old_view,
+ 					 const ViewData& new_view )

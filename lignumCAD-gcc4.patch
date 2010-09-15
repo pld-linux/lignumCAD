@@ -1,0 +1,54 @@
+diff -urp lignumCAD.pld/constants.h lignumCAD.pld2/constants.h
+--- lignumCAD.pld/constants.h	2002-12-13 13:37:41.000000000 +0100
++++ lignumCAD.pld2/constants.h	2010-09-15 20:07:16.000000000 +0200
+@@ -720,7 +720,7 @@ namespace lC {
+     const QString URL                 = "url";
+     const QString VALUE               = "value";
+     const QString VALUE_UNIT          = "%1%2";
+-    const QString VERSION             = "version";
++    const QString LVERSION            = "version";
+     const QString VIEW_DATA           = "view-data";
+     const QString VIEW_POINT          = "view-point";
+     const QString VIEW                = "view";
+diff -urp lignumCAD.pld/designbookview.cpp lignumCAD.pld2/designbookview.cpp
+--- lignumCAD.pld/designbookview.cpp	2010-09-15 19:08:46.000000000 +0200
++++ lignumCAD.pld2/designbookview.cpp	2010-09-15 19:55:08.000000000 +0200
+@@ -1666,7 +1666,7 @@ bool DesignBookView::read ( const QStrin
+     return false;
+   }
+   else {
+-    uint file_version = docElement.attribute( lC::STR::VERSION ).toUInt();
++    uint file_version = docElement.attribute( lC::STR::LVERSION ).toUInt();
+     if ( file_version < lC::FILE_VERSION ) {
+       qApp->restoreOverrideCursor();
+ 
+@@ -1811,7 +1811,7 @@ bool DesignBookView::write ( void )
+ 
+   QDomDocument document( lC::STR::LIGNUMCAD );
+   QDomElement root = document.createElement( lC::STR::LIGNUMCAD );
+-  root.setAttribute( lC::STR::VERSION, lC::FILE_VERSION );
++  root.setAttribute( lC::STR::LVERSION, lC::FILE_VERSION );
+   document.appendChild( root );
+ 
+   // First, the model geometric data...
+diff -urp lignumCAD.pld/model.cpp lignumCAD.pld2/model.cpp
+--- lignumCAD.pld/model.cpp	2002-12-13 13:34:22.000000000 +0100
++++ lignumCAD.pld2/model.cpp	2010-09-15 20:08:12.000000000 +0200
+@@ -98,7 +98,7 @@ void Model::restoreMetadata ( const QDom
+       else if ( e.tagName() == lC::STR::MODIFIED ) {
+ 	modified_ = QDateTime::fromString( e.attribute( lC::STR::VALUE ), Qt::ISODate );
+       }
+-      else if ( e.tagName() == lC::STR::VERSION ) {
++      else if ( e.tagName() == lC::STR::LVERSION ) {
+ 	version_ = e.attribute( lC::STR::VALUE ).toUInt();
+       }
+       else if ( e.tagName() == lC::STR::REVISION ) {
+@@ -546,7 +546,7 @@ void Model::write ( QDomElement& xml_rep
+   modified_element.setAttribute( lC::STR::VALUE, modified_.toString( Qt::ISODate ) );
+   metadata_element.appendChild( modified_element );
+ 
+-  QDomElement version_element = document.createElement( lC::STR::VERSION );
++  QDomElement version_element = document.createElement( lC::STR::LVERSION );
+   version_element.setAttribute( lC::STR::VALUE, version_ );
+   metadata_element.appendChild( version_element );
+ 
