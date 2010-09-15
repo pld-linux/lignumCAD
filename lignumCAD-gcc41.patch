@@ -22,3 +22,27 @@ diff -urp lignumCAD.pld/openglview.cpp lignumCAD.pld2/openglview.cpp
  					 const PageView* page_view,
  					 const ViewData& old_view,
  					 const ViewData& new_view )
+diff -urp lignumCAD.pld/annotationview.cpp lignumCAD.pld2/annotationview.cpp
+--- lignumCAD.pld/annotationview.cpp	2010-09-15 19:08:46.000000000 +0200
++++ lignumCAD.pld2/annotationview.cpp	2010-09-15 20:50:18.000000000 +0200
+@@ -375,7 +375,7 @@ namespace Space2D {
+      * \param new_origin the new origin of the annotation (in model units)
+      * \param new_size the new size of the annotation box (in paper units)
+      */
+-    MoveAnnotationCommand::MoveAnnotationCommand ( const QString& name,
++    MoveAnnotationCommand ( const QString& name,
+ 						   DesignBookView* design_book_view,
+ 						   const DBURL& db_url,
+ 						   Point old_origin,
+diff -urp lignumCAD.pld/ocsolidview.cpp lignumCAD.pld2/ocsolidview.cpp
+--- lignumCAD.pld/ocsolidview.cpp	2002-12-13 17:17:40.000000000 +0100
++++ lignumCAD.pld2/ocsolidview.cpp	2010-09-15 21:29:31.000000000 +0200
+@@ -231,7 +231,7 @@ namespace Space3D {
+      * \param solid reference to solid.
+      * \param old_parameters old parameters of solid.
+      */
+-    ModifySolidCommand::ModifySolidCommand ( const QString& name,
++    ModifySolidCommand ( const QString& name,
+ 					     DesignBookView* design_book_view,
+ 					     OCSolid* solid,
+ 					     const std::map<QString,double>&

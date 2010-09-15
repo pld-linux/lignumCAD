@@ -1,0 +1,11 @@
+diff -urp lignumCAD.pld/libemf.cpp lignumCAD.pld2/libemf.cpp
+--- lignumCAD.pld/libemf.cpp	2002-06-14 19:52:59.000000000 +0200
++++ lignumCAD.pld2/libemf.cpp	2010-09-15 21:18:11.000000000 +0200
+@@ -19,6 +19,7 @@
+  *
+  */
+ #include "libemf.h"
++#include <limits.h>
+ #include <ext/functional>
+ 
+ namespace EMF {

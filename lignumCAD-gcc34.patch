@@ -37,3 +37,38 @@ diff -urp lignumCAD.pld/viewdata.h lignumCAD.pld2/viewdata.h
  
  /*!
   * Save the information which (minimally) describes the current
+diff -urp lignumCAD.pld/libemf.h lignumCAD.pld2/libemf.h
+--- lignumCAD.pld/libemf.h	2002-06-14 19:52:59.000000000 +0200
++++ lignumCAD.pld2/libemf.h	2010-09-15 21:16:28.000000000 +0200
+@@ -26,6 +26,7 @@
+ #include <map>
+ #include <functional>
+ #include <algorithm>
++#include <iostream>
+ 
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+diff -urp lignumCAD.pld/openglprinter.cpp lignumCAD.pld2/openglprinter.cpp
+--- lignumCAD.pld/openglprinter.cpp	2002-12-08 23:13:06.000000000 +0100
++++ lignumCAD.pld2/openglprinter.cpp	2010-09-15 20:56:33.000000000 +0200
+@@ -20,6 +20,9 @@
+  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  *
+  */
++
++#include <fstream>
++
+ #include <qpainter.h>
+ #include <qpicture.h>
+ #include <qfileinfo.h>
+diff -urp lignumCAD.pld/libemf.cpp lignumCAD.pld2/libemf.cpp
+--- lignumCAD.pld/libemf.cpp	2002-06-14 19:52:59.000000000 +0200
++++ lignumCAD.pld2/libemf.cpp	2010-09-15 21:18:11.000000000 +0200
+@@ -19,6 +19,7 @@
+  *
+  */
+ #include "libemf.h"
++#include <ext/functional>
+ 
+ namespace EMF {
+ 

@@ -371,6 +371,15 @@ diff -ur -urp lignumCAD/line.h ../lignumCAD-1/line.h
  
    signals:
      void destroyedLine ();
+@@ -66,7 +66,7 @@ namespace Space2D {
+     //    void modifiedPosition ();
+   };
+ 
+-  ostream& operator<< ( ostream& o, Line* line );
++  std::ostream& operator<< ( std::ostream& o, Line* line );
+ 
+   class Axis : public Line {
+     Q_OBJECT
 @@ -77,7 +78,7 @@ namespace Space2D {
      ~Axis ( void ) {}
  
@@ -955,7 +964,7 @@ diff -ur -urp lignumCAD/subassemblyview.h ../lignumCAD-1/subassemblyview.h
    InputObject* createInput ( void ) { return 0; }
    InputObject* modifyInput ( void );
 diff -urp lignumCAD.pld/centerlineview.cpp lignumCAD.pld2/centerlineview.cpp
---- lignumCAD.pld/centerlineview.cpp	2002-12-04 14:47:01.000000000 +0100
+--- lignumCAD/centerlineview.cpp	2002-12-04 14:47:01.000000000 +0100
 +++ lignumCAD.pld2/centerlineview.cpp	2010-09-15 20:11:07.000000000 +0200
 @@ -330,7 +330,7 @@ namespace Space2D {
  	dynamic_cast< FigureView* >( centerline_view_->parent()->
@@ -1002,20 +1011,8 @@ diff -urp lignumCAD.pld/centerlineview.cpp lignumCAD.pld2/centerlineview.cpp
    {
      if ( entity == FIGURE ) {
        DimensionView* dmv = 0;
-diff -urp lignumCAD.pld/line.h lignumCAD.pld2/line.h
---- lignumCAD.pld/line.h	2010-09-15 19:08:46.000000000 +0200
-+++ lignumCAD.pld2/line.h	2010-09-15 20:09:32.000000000 +0200
-@@ -66,7 +66,7 @@ namespace Space2D {
-     //    void modifiedPosition ();
-   };
- 
--  ostream& operator<< ( ostream& o, Line* line );
-+  std::ostream& operator<< ( std::ostream& o, Line* line );
- 
-   class Axis : public Line {
-     Q_OBJECT
 diff -urp lignumCAD.pld/rectangleview.cpp lignumCAD.pld2/rectangleview.cpp
---- lignumCAD.pld/rectangleview.cpp	2002-12-04 14:48:10.000000000 +0100
+--- lignumCAD/rectangleview.cpp	2002-12-04 14:48:10.000000000 +0100
 +++ lignumCAD.pld2/rectangleview.cpp	2010-09-15 20:12:55.000000000 +0200
 @@ -581,7 +581,7 @@ namespace Space2D {
  	dynamic_cast< FigureView* >( rectangle_view_->parent()->
@@ -1071,3 +1068,779 @@ diff -urp lignumCAD.pld/rectangleview.cpp lignumCAD.pld2/rectangleview.cpp
    {
      if ( entity == FIGURE ) {
        DimensionView* dmv = 0;
+diff -urp lignumCAD.pld/constructiondatumview.h lignumCAD.pld2/constructiondatumview.h
+--- lignumCAD/constructiondatumview.h	2002-10-04 21:37:16.000000000 +0200
++++ lignumCAD.pld2/constructiondatumview.h	2010-09-15 21:29:59.000000000 +0200
+@@ -87,7 +87,7 @@ namespace Space3D {
+     //! The singleton instance of the constructiondatumview factory.
+     static ConstructionDatumViewFactory* instance_;
+ 
+-    map< QString, const ConstructionDatumViewMetadata*> views_;
++    std::map< QString, const ConstructionDatumViewMetadata*> views_;
+   };
+ } // end of Space3D namespace
+ #endif // CONSTRUCTIONDATUMVIEW_H
+diff -urp lignumCAD.pld/libemf.cpp lignumCAD.pld2/libemf.cpp
+--- lignumCAD/libemf.cpp	2002-06-14 19:52:59.000000000 +0200
++++ lignumCAD.pld2/libemf.cpp	2010-09-15 21:18:11.000000000 +0200
+@@ -48,7 +50,7 @@ namespace EMF {
+       be32 = !be16;
+ 
+     if ( be32 != be16 ) {
+-      cerr << "endian-ness not consistent between short's and int's!" << endl;
++      std::cerr << "endian-ness not consistent between short's and int's!" << std::endl;
+       ::abort();
+     }
+ 
+@@ -854,7 +856,7 @@ extern "C" {
+     if ( dc->fp ) {
+ 
+       std::for_each( dc->records.begin(), dc->records.end(),
+-		     std::bind2nd( std::mem_fun1( &EMF::METARECORD::serialize ),
++		     std::bind2nd( __gnu_cxx::mem_fun1( &EMF::METARECORD::serialize ),
+ 				   dc->ds ) );
+       fclose( dc->fp );
+ 
+@@ -901,7 +903,7 @@ extern "C" {
+     if ( dc->fp ) {
+ 
+       std::for_each( dc->records.begin(), dc->records.end(),
+-		     std::bind2nd( std::mem_fun1( &EMF::METARECORD::serialize ),
++		     std::bind2nd( __gnu_cxx::mem_fun1( &EMF::METARECORD::serialize ),
+ 				   dc->ds ) );
+     }
+ 
+@@ -1037,7 +1039,7 @@ extern "C" {
+       if ( feof( fp ) ) break;
+ 
+       if ( emr.nSize == 0 ) {
+-	cerr << "GetEnhMetaFileW error: record size == 0. cannot continue" << endl;
++	std::cerr << "GetEnhMetaFileW error: record size == 0. cannot continue" << std::endl;
+ 	fclose( fp );
+ 	return 0;
+       }
+@@ -1055,8 +1057,8 @@ extern "C" {
+ 	dc->appendRecord( record );
+       }
+       else
+-	cerr << "GetEnhMetaFileW warning: read unknown record type " << emr.iType
+-	     << " of size " << emr.nSize << endl;
++	std::cerr << "GetEnhMetaFileW warning: read unknown record type " << emr.iType
++	     << " of size " << emr.nSize << std::endl;
+ 
+       // Regardless, position ourselves at the next record.
+       fseek( fp, next_position, SEEK_SET );
+diff -urp lignumCAD.pld/ocsolid.cpp lignumCAD.pld2/ocsolid.cpp
+--- lignumCAD/ocsolid.cpp	2002-12-13 17:23:28.000000000 +0100
++++ lignumCAD.pld2/ocsolid.cpp	2010-09-15 21:25:26.000000000 +0200
+@@ -228,7 +228,7 @@ namespace Space3D {
+ 
+   QString OCSolid::idPath ( QValueVector<uint> id_path ) const
+   {
+-    hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator face =
++    __gnu_cxx::hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator face =
+       face_names_.begin();
+ 
+     for ( ; face != face_names_.end(); ++face )
+@@ -251,7 +251,7 @@ namespace Space3D {
+     QString type = path_components.front().right( path_components.front().length()
+ 						  - dot_pos - 1 );
+ 
+-    hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator face =
++    __gnu_cxx::hash_map<TopoDS_Face,uint,lCShapeHasher>::const_iterator face =
+       face_names_.begin();
+ 
+     for ( ; face != face_names_.end(); ++face )
+@@ -514,9 +514,9 @@ namespace Space3D {
+     emit modified();
+   }
+ 
+-  void OCSolidRPP::updateParameters ( const map<QString,double>& parameters )
++  void OCSolidRPP::updateParameters ( const std::map<QString,double>& parameters )
+   {
+-    map<QString,double>::const_iterator p = parameters.begin();
++    std::map<QString,double>::const_iterator p = parameters.begin();
+     for ( ; p != parameters.end(); ++p ) {
+       parameter( (*p).first ).setValue( (*p).second );
+     }
+@@ -548,7 +548,7 @@ namespace Space3D {
+     double length = parameter( lC::STR::LENGTH ).value();
+     double width = parameter( lC::STR::WIDTH ).value();
+     double thickness = parameter( lC::STR::THICKNESS ).value();
+-    map<QString,double> parameters;
++    std::map<QString,double> parameters;
+ 
+     if ( length + delta[X] <= minimum_size ) {
+       if ( length <= minimum_size )
+@@ -602,7 +602,7 @@ namespace Space3D {
+       
+     QDomElement rpp_element = document.createElement( lC::STR::RPP );
+ 
+-    map<QString,Parameter>::const_iterator parameter = parametersBegin();
++    std::map<QString,Parameter>::const_iterator parameter = parametersBegin();
+     for ( ; parameter != parametersEnd(); ++parameter )
+       rpp_element.setAttribute( (*parameter).first,
+ 				lC::format( (*parameter).second.value() ) );
+@@ -812,9 +812,9 @@ namespace Space3D {
+     emit modified();
+   }
+ 
+-  void OCSolidPGP::updateParameters ( const map<QString,double>& parameters )
++  void OCSolidPGP::updateParameters ( const std::map<QString,double>& parameters )
+   {
+-    map<QString,double>::const_iterator p = parameters.begin();
++    std::map<QString,double>::const_iterator p = parameters.begin();
+     for ( ; p != parameters.end(); ++p ) {
+       parameter( (*p).first ).setValue( (*p).second );
+     }
+@@ -846,7 +846,7 @@ namespace Space3D {
+     double length = parameter( lC::STR::LENGTH ).value();
+     double width = parameter( lC::STR::WIDTH ).value();
+     double thickness = parameter( lC::STR::THICKNESS ).value();
+-    map<QString,double> parameters;
++    std::map<QString,double> parameters;
+ 
+     if ( length + delta[X] <= minimum_size ) {
+       if ( length <= minimum_size )
+@@ -900,7 +900,7 @@ namespace Space3D {
+       
+     QDomElement pgp_element = document.createElement( lC::STR::PGP );
+ 
+-    map<QString,Parameter>::const_iterator parameter = parametersBegin();
++    std::map<QString,Parameter>::const_iterator parameter = parametersBegin();
+     for ( ; parameter != parametersEnd(); ++parameter )
+       pgp_element.setAttribute( (*parameter).first,
+ 				lC::format( (*parameter).second.value() ) );
+@@ -1051,9 +1051,9 @@ namespace Space3D {
+     emit modified();
+   }
+ 
+-  void OCSolidCYL::updateParameters ( const map<QString,double>& parameters )
++  void OCSolidCYL::updateParameters ( const std::map<QString,double>& parameters )
+   {
+-    map<QString,double>::const_iterator p = parameters.begin();
++    std::map<QString,double>::const_iterator p = parameters.begin();
+     for ( ; p != parameters.end(); ++p ) {
+       parameter( (*p).first ).setValue( (*p).second );
+     }
+@@ -1083,7 +1083,7 @@ namespace Space3D {
+ 
+     double length = parameter( lC::STR::LENGTH ).value();
+     double diameter = parameter( lC::STR::DIAMETER ).value();
+-    map<QString,double> parameters;
++    std::map<QString,double> parameters;
+ 
+     if ( length + delta[Z] <= minimum_size ) {
+       if ( length <= minimum_size )
+@@ -1126,7 +1126,7 @@ namespace Space3D {
+ 
+     QDomElement cyl_element = document.createElement( lC::STR::CYL );
+ 
+-    map<QString,Parameter>::const_iterator parameter = parametersBegin();
++    std::map<QString,Parameter>::const_iterator parameter = parametersBegin();
+     for ( ; parameter != parametersEnd(); ++parameter )
+       cyl_element.setAttribute( (*parameter).first,
+ 				lC::format( (*parameter).second.value() ) );
+@@ -1457,9 +1457,9 @@ namespace Space3D {
+     emit modified();
+   }
+ 
+-  void OCSolidRPPCON::updateParameters ( const map<QString,double>& parameters )
++  void OCSolidRPPCON::updateParameters ( const std::map<QString,double>& parameters )
+   {
+-    map<QString,double>::const_iterator p = parameters.begin();
++    std::map<QString,double>::const_iterator p = parameters.begin();
+     for ( ; p != parameters.end(); ++p ) {
+       parameter( (*p).first ).setValue( (*p).second );
+     }
+@@ -1498,7 +1498,7 @@ namespace Space3D {
+     double con_length = parameter( lC::STR::CON_LENGTH ).value();
+     double con_top_diameter = parameter( lC::STR::CON_TOP_DIAMETER ).value();
+     double con_bottom_diameter = parameter( lC::STR::CON_BOTTOM_DIAMETER ).value();
+-    map<QString,double> parameters;
++    std::map<QString,double> parameters;
+ 
+     if ( id == 0 || id == 1 || id == 2 || id == 3 ) {
+       if ( length + delta[Z] <= minimum_size ) {
+@@ -1619,7 +1619,7 @@ namespace Space3D {
+ 
+     QDomElement rppcon_element = document.createElement( lC::STR::RPPCON );
+ 
+-    map<QString,Parameter>::const_iterator parameter = parametersBegin();
++    std::map<QString,Parameter>::const_iterator parameter = parametersBegin();
+     for ( ; parameter != parametersEnd(); ++parameter )
+       rppcon_element.setAttribute( (*parameter).first,
+ 				   lC::format( (*parameter).second.value() ) );
+@@ -1941,9 +1941,9 @@ namespace Space3D {
+     //    cout << now() << path() << " modified [after emit]" << endl;
+   }
+ 
+-  void OCSolidRPPPYR::updateParameters ( const map<QString,double>& parameters )
++  void OCSolidRPPPYR::updateParameters ( const std::map<QString,double>& parameters )
+   {
+-    map<QString,double>::const_iterator p = parameters.begin();
++    std::map<QString,double>::const_iterator p = parameters.begin();
+     for ( ; p != parameters.end(); ++p ) {
+       parameter( (*p).first ).setValue( (*p).second );
+     }
+@@ -1977,7 +1977,7 @@ namespace Space3D {
+     double rec_length = parameter( lC::STR::REC_LENGTH ).value();
+     double rec_width = parameter( lC::STR::REC_WIDTH ).value();
+     double pyr_width = parameter( lC::STR::PYR_WIDTH ).value();
+-    map<QString,double> parameters;
++    std::map<QString,double> parameters;
+ 
+     if ( id == 0 || id == 1 || id == 2 || id == 3 ||
+ 	 id == 4 || id == 5 || id == 6 || id == 7 ) {
+@@ -2070,7 +2070,7 @@ namespace Space3D {
+ 
+     QDomElement rpppyr_element = document.createElement( lC::STR::RPPPYR );
+ 
+-    map<QString,Parameter>::const_iterator parameter = parametersBegin();
++    std::map<QString,Parameter>::const_iterator parameter = parametersBegin();
+     for ( ; parameter != parametersEnd(); ++parameter )
+       rpppyr_element.setAttribute( (*parameter).first,
+ 				   lC::format( (*parameter).second.value() ) );
+@@ -2359,9 +2359,9 @@ namespace Space3D {
+     emit modified();
+   }
+ 
+-  void OCSolidBSPCYL::updateParameters ( const map<QString,double>& parameters )
++  void OCSolidBSPCYL::updateParameters ( const std::map<QString,double>& parameters )
+   {
+-    map<QString,double>::const_iterator p = parameters.begin();
++    std::map<QString,double>::const_iterator p = parameters.begin();
+     for ( ; p != parameters.end(); ++p ) {
+       parameter( (*p).first ).setValue( (*p).second );
+     }
+@@ -2395,7 +2395,7 @@ namespace Space3D {
+     double bsp_diameter = parameter( lC::STR::BSP_DIAMETER ).value();
+     double cyl_diameter = parameter( lC::STR::CYL_DIAMETER ).value();
+     double cyl_length = parameter( lC::STR::CYL_LENGTH ).value();
+-    map<QString,double> parameters;
++    std::map<QString,double> parameters;
+ 
+     if ( id == 2 || id == 3 ) {
+       if ( length + delta[Z] <= minimum_size ) {
+@@ -2486,7 +2486,7 @@ namespace Space3D {
+ 
+     QDomElement bspcyl_element = document.createElement( lC::STR::BSPCYL );
+ 
+-    map<QString,Parameter>::const_iterator parameter = parametersBegin();
++    std::map<QString,Parameter>::const_iterator parameter = parametersBegin();
+     for ( ; parameter != parametersEnd(); ++parameter )
+       bspcyl_element.setAttribute( (*parameter).first,
+ 				   lC::format( (*parameter).second.value() ) );
+diff -urp lignumCAD.pld/ocsoliddraw.cpp lignumCAD.pld2/ocsoliddraw.cpp
+--- lignumCAD/ocsoliddraw.cpp	2002-12-13 17:18:05.000000000 +0100
++++ lignumCAD.pld2/ocsoliddraw.cpp	2010-09-15 21:39:07.000000000 +0200
+@@ -143,7 +143,7 @@ namespace Space3D {
+       // Assign a selection name to this face if it doesn't have one already.
+       GLuint selection_name;
+ 
+-      map< uint, GLuint >::const_iterator face_id =
++      std::map< uint, GLuint >::const_iterator face_id =
+ 	face_ids_.find( solid_->faceID( face ) );
+       if ( face_id == face_ids_.end() ) {
+ 	selection_name = view_->genSelectionName();
+@@ -153,7 +153,7 @@ namespace Space3D {
+ 	selection_name = (*face_id).second;
+       }
+ 
+-      map<GLuint,GV>::const_iterator wire_view =
++      std::map<GLuint,GV>::const_iterator wire_view =
+ 	wire_views_.find( selection_name );
+       if ( wire_view == wire_views_.end() )
+ 	wire_views_[selection_name] = GV( glGenLists(1) );
+@@ -187,7 +187,7 @@ namespace Space3D {
+   }
+ 
+   namespace {
+-    struct Harlequin : map<QString,QColor> {
++    struct Harlequin : std::map<QString,QColor> {
+       Harlequin ( void )
+       {
+ 	(*this)[lC::STR::FRONT] = Qt::green;
+@@ -216,7 +216,7 @@ namespace Space3D {
+       // Assign a selection name to this face if it doesn't have one already.
+       GLuint selection_name;
+ 
+-      map< uint, GLuint >::const_iterator face_id =
++      std::map< uint, GLuint >::const_iterator face_id =
+ 	face_ids_.find( solid_->faceID( face ) );
+       if ( face_id == face_ids_.end() ) {
+ 	selection_name = view_->genSelectionName();
+@@ -226,7 +226,7 @@ namespace Space3D {
+ 	selection_name = (*face_id).second;
+       }
+ 
+-      map<GLuint,GV>::const_iterator face_view =
++      std::map<GLuint,GV>::const_iterator face_view =
+ 	face_views_.find( selection_name );
+       if ( face_view == face_views_.end() )
+ 	face_views_[selection_name] = GV( glGenLists(1) );
+@@ -343,7 +343,7 @@ namespace Space3D {
+   {
+     // Unfortunately, this involves a search...
+ 
+-    map<uint,GLuint>::const_iterator face = face_ids_.begin();
++    std::map<uint,GLuint>::const_iterator face = face_ids_.begin();
+     for ( ; face != face_ids_.end(); ++face )
+       if ( (*face).second == selection_name )
+ 	return lC::formatName( solid_->name() ) + '.' + solid_->type() + '/' +
+@@ -357,7 +357,7 @@ namespace Space3D {
+   {
+     // Unfortunately, this involves a search...
+ 
+-    map<uint,GLuint>::const_iterator face = face_ids_.begin();
++    std::map<uint,GLuint>::const_iterator face = face_ids_.begin();
+     for ( ; face != face_ids_.end(); ++face )
+       if ( (*face).second == selection_name )
+ 	return lC::formatName( solid_->name() ) + '/' +
+@@ -371,7 +371,7 @@ namespace Space3D {
+     QValueVector<uint> id_path( 2 );
+     // Unfortunately, this involves a search...
+ 
+-    map<uint,GLuint>::const_iterator face = face_ids_.begin();
++    std::map<uint,GLuint>::const_iterator face = face_ids_.begin();
+     for ( ; face != face_ids_.end(); ++face )
+       if ( (*face).second == selection_name ) {
+ 	id_path[0] = solid_->id();
+@@ -385,7 +385,7 @@ namespace Space3D {
+   {
+     // Only make new handle graphics views if the handle name is unknown
+     // (i.e., this should only occur once, immediately after solid creation).
+-    map<uint, HandleData>::const_iterator handle = solid_->handlesBegin();
++    std::map<uint, HandleData>::const_iterator handle = solid_->handlesBegin();
+     for ( ; handle != solid_->handlesEnd(); ++handle ) {
+       if ( handle_ids_.find( (*handle).first ) == handle_ids_.end() )
+ 	handle_ids_[ (*handle).first ] = view_->genSelectionName();
+@@ -395,7 +395,7 @@ namespace Space3D {
+   bool OCSolidDraw::isHandle ( GLuint selection_name ) const
+   {
+     // Unfortunately, this involves a search...
+-    map<uint,GLuint>::const_iterator handle = handle_ids_.begin();
++    std::map<uint,GLuint>::const_iterator handle = handle_ids_.begin();
+     for ( ; handle != handle_ids_.end(); ++handle )
+       if ( (*handle).second == selection_name )
+ 	return true;
+@@ -405,7 +405,7 @@ namespace Space3D {
+ 
+   uint OCSolidDraw::handleID ( GLuint selection_name ) const
+   {
+-    map<uint,GLuint>::const_iterator handle = handle_ids_.begin();
++    std::map<uint,GLuint>::const_iterator handle = handle_ids_.begin();
+     for ( ; handle != handle_ids_.end(); ++handle )
+       if ( (*handle).second == selection_name )
+ 	return (*handle).first;
+@@ -415,9 +415,9 @@ namespace Space3D {
+ 
+   QString OCSolidDraw::activeDimensionName ( void ) const
+   {
+-    map<QString,GLuint>::const_iterator dimension_name = dimension_names_.begin();
++    std::map<QString,GLuint>::const_iterator dimension_name = dimension_names_.begin();
+     for ( ; dimension_name != dimension_names_.end(); ++dimension_name ) {
+-      map<GLuint,Dimension>::const_iterator dimension_view =
++      std::map<GLuint,Dimension>::const_iterator dimension_view =
+ 	dimension_views_.find( (*dimension_name).second );
+       if ( dimension_view != dimension_views_.end() ) {
+ 	if ( (*dimension_view).second.mode() == lC::Render::ACTIVATED )
+@@ -570,11 +570,11 @@ namespace Space3D {
+ 
+   void OCSolidDraw::updateDimensionViews ( void )
+   {
+-    map<QString,Parameter>::const_iterator parameter = solid_->parametersBegin();
++    std::map<QString,Parameter>::const_iterator parameter = solid_->parametersBegin();
+     for ( ; parameter != solid_->parametersEnd(); ++parameter ) {
+ 
+       GLuint selection_name;
+-      map<QString,GLuint>::const_iterator dimension_name =
++      std::map<QString,GLuint>::const_iterator dimension_name =
+ 	dimension_names_.find( (*parameter).first );
+       if ( dimension_name == dimension_names_.end() ) {
+ 	selection_name = view_->genSelectionName();
+@@ -593,10 +593,10 @@ namespace Space3D {
+ 		     (*parameter).second.normal().Y(),
+ 		     (*parameter).second.normal().Z() );
+ 
+-      map<GLuint,Dimension>::iterator dimension =
++      std::map<GLuint,Dimension>::iterator dimension =
+ 	dimension_views_.find( selection_name );
+       if ( dimension == dimension_views_.end() )
+-	dimension_views_.insert( pair<GLuint,Dimension>( selection_name,
++	dimension_views_.insert( std::pair<GLuint,Dimension>( selection_name,
+           Dimension( end0, end1, normal, view_, (*parameter).second.note() ) ) );
+       else
+ 	(*dimension).second.setEndsNormal( end0, end1, normal, view_,
+@@ -606,12 +606,12 @@ namespace Space3D {
+ 
+   void OCSolidDraw::updateDatums ( void )
+   {
+-    map<QString,const ConstructionDatum*>::const_iterator datum =
++    std::map<QString,const ConstructionDatum*>::const_iterator datum =
+       solid_->datumsBegin();
+     for ( ; datum != solid_->datumsEnd(); ++datum ) {
+ 
+       GLuint selection_name;
+-      map<QString,GLuint>::const_iterator datum_name =
++      std::map<QString,GLuint>::const_iterator datum_name =
+ 	datum_names_.find( (*datum).first );
+       if ( datum_name == datum_names_.end() ) {
+ 	selection_name = view_->genSelectionName();
+@@ -620,10 +620,10 @@ namespace Space3D {
+       else
+ 	selection_name = (*datum_name).second;
+ 
+-      map<GLuint,ConstructionDatumView*>::iterator datum_view =
++      std::map<GLuint,ConstructionDatumView*>::iterator datum_view =
+ 	datum_views_.find( selection_name );
+       if ( datum_view == datum_views_.end() )
+-	datum_views_.insert( pair<GLuint,ConstructionDatumView*>( selection_name,
++	datum_views_.insert( std::pair<GLuint,ConstructionDatumView*>( selection_name,
+ 	  ConstructionDatumViewFactory::instance()->create( (*datum).second ) ) );
+     }
+   }
+@@ -632,7 +632,7 @@ namespace Space3D {
+   {
+     const GLdouble* modelview = view_->viewOrientation();
+ 
+-    map<GLuint,Dimension>::iterator dimension = dimension_views_.begin();
++    std::map<GLuint,Dimension>::iterator dimension = dimension_views_.begin();
+     for ( ; dimension != dimension_views_.end(); ++dimension )
+       (*dimension).second.setViewNormal( Vector( modelview[2],
+ 						 modelview[6],
+@@ -661,7 +661,7 @@ namespace Space3D {
+ 	break;
+       case FACE:
+ 	glColor3ubv( lC::qCubv( view_->geometryColor() ) );
+-	map<GLuint,GV>::const_iterator wv = wire_views_.begin();
++	std::map<GLuint,GV>::const_iterator wv = wire_views_.begin();
+ 	for ( ; wv != wire_views_.end(); ++wv ) {
+ 
+ 	  switch ( (*wv).second.mode() ) {
+@@ -700,7 +700,7 @@ namespace Space3D {
+       glPopMatrix();
+ 
+       glColor3ubv( lC::qCubv( view_->geometryColor().light() ) );
+-      map<GLuint,GV>::const_iterator wv = wire_views_.begin();
++      std::map<GLuint,GV>::const_iterator wv = wire_views_.begin();
+       for ( ; wv != wire_views_.end(); ++wv ) {
+ 
+ 	switch ( (*wv).second.mode() ) {
+@@ -723,7 +723,7 @@ namespace Space3D {
+       QColor color = view_->geometryColor();
+       if ( solid_->material() != 0 )
+ 	color = solid_->material()->color();
+-      map<GLuint,GV>::const_iterator fv = face_views_.begin();
++      std::map<GLuint,GV>::const_iterator fv = face_views_.begin();
+ 
+       switch ( entity ) {
+ 
+@@ -784,7 +784,7 @@ namespace Space3D {
+       QColor color = view_->geometryColor();
+       if ( solid_->material() != 0 )
+ 	color = solid_->material()->color();
+-      map<GLuint,GV>::const_iterator fv = face_views_.begin();
++      std::map<GLuint,GV>::const_iterator fv = face_views_.begin();
+ 
+       switch ( entity ) {
+ 
+@@ -835,7 +835,7 @@ namespace Space3D {
+     case lC::Render::HIGHLIGHTS: {
+ 
+       glColor3ubv( lC::qCubv( view_->geometryColor().light() ) );
+-      map<GLuint,GV>::const_iterator wv = wire_views_.begin();
++      std::map<GLuint,GV>::const_iterator wv = wire_views_.begin();
+       for ( ; wv != wire_views_.end(); ++wv ) {
+ 
+ 	switch ( (*wv).second.mode() ) {
+@@ -858,7 +858,7 @@ namespace Space3D {
+ 
+       case lC::Render::HIGHLIGHTED:
+       case lC::Render::ACTIVATED:
+-	map<uint, HandleData>::const_iterator handle = solid_->handlesBegin();
++	std::map<uint, HandleData>::const_iterator handle = solid_->handlesBegin();
+ 	for ( ; handle != solid_->handlesEnd(); ++handle ) {
+ 	  Point p( (*handle).second.position().X(),
+ 		   (*handle).second.position().Y(),
+@@ -869,11 +869,11 @@ namespace Space3D {
+       break;
+ 
+     case FACE: {
+-      map<uint,GLuint>::const_iterator fid = face_ids_.begin();
++      std::map<uint,GLuint>::const_iterator fid = face_ids_.begin();
+       for ( ; fid != face_ids_.end(); ++fid ) {
+ 	// Note the need here for a map from face selection name
+ 	// to the face string name...
+-	map<GLuint,GV>::const_iterator fv = face_views_.find((*fid).second);
++	std::map<GLuint,GV>::const_iterator fv = face_views_.find((*fid).second);
+ 	if ( fv != face_views_.end() ) {
+ 	  switch ( (*fv).second.mode() ) {
+ 	  case lC::Render::HIGHLIGHTED:
+@@ -904,12 +904,12 @@ namespace Space3D {
+       case FIGURE:
+ 	switch ( mode ) {
+ 	case lC::Render::ACTIVATED:
+-	  map<GLuint,Dimension>::const_iterator dimension =
++	  std::map<GLuint,Dimension>::const_iterator dimension =
+ 	    dimension_views_.begin();
+ 	  for ( ; dimension != dimension_views_.end(); ++dimension )
+ 	    (*dimension).second.draw();
+ 
+-	  map<GLuint,ConstructionDatumView*>::const_iterator datum_view =
++	  std::map<GLuint,ConstructionDatumView*>::const_iterator datum_view =
+ 	    datum_views_.begin();
+ 	  for ( ; datum_view != datum_views_.end(); ++datum_view )
+ 	    (*datum_view).second->draw( view_ );
+@@ -922,7 +922,7 @@ namespace Space3D {
+   void OCSolidDraw::select ( SelectionEntity entity, lC::Render::Mode mode,
+ 			     bool select_parameters )
+   {
+-    map<GLuint,GV>::const_iterator fv = face_views_.begin();
++    std::map<GLuint,GV>::const_iterator fv = face_views_.begin();
+     switch ( entity ) {
+     case FIGURE:
+       // Note: In this case, we expect the view to have already pushed
+@@ -933,7 +933,7 @@ namespace Space3D {
+       switch ( mode ) {
+       case lC::Render::ACTIVATED: {
+ 	if ( select_parameters ) {
+-	  map<GLuint,Dimension>::const_iterator dimension =
++	  std::map<GLuint,Dimension>::const_iterator dimension =
+ 	    dimension_views_.begin();
+ 	  for ( ; dimension != dimension_views_.end(); ++dimension ) {
+ 	    glPushName( (*dimension).first );
+@@ -944,9 +944,9 @@ namespace Space3D {
+       }
+       // Note, delibrate fall through.
+       case lC::Render::HIGHLIGHTED: {
+-	map<uint, HandleData>::const_iterator handle = solid_->handlesBegin();
++	std::map<uint, HandleData>::const_iterator handle = solid_->handlesBegin();
+ 	for ( ; handle != solid_->handlesEnd(); ++handle ) {
+-	  map<uint,GLuint>::const_iterator h = handle_ids_.find( (*handle).first );
++	  std::map<uint,GLuint>::const_iterator h = handle_ids_.find( (*handle).first );
+ 	  if ( h != handle_ids_.end() ) {
+ 	    Point p( (*handle).second.position().X(),
+ 		     (*handle).second.position().Y(),
+@@ -970,12 +970,12 @@ namespace Space3D {
+   }
+ 
+   void OCSolidDraw::setHighlighted ( bool highlight, SelectionEntity entity,
+-				     const vector<GLuint>& items )
++				     const std::vector<GLuint>& items )
+   {
+     // I guess this is now out of sync with the previous milieu
+     switch ( entity ) {
+     case FIGURE: {
+-      map<GLuint,Dimension>::iterator dimension = dimension_views_.find( items[1] );
++      std::map<GLuint,Dimension>::iterator dimension = dimension_views_.find( items[1] );
+       if ( dimension != dimension_views_.end() ) {
+ 	if ( (*dimension).second.mode() != lC::Render::ACTIVATED ) {
+ 	  if ( highlight )
+@@ -1001,12 +1001,12 @@ namespace Space3D {
+   }
+ 
+   void OCSolidDraw::setActivated ( bool activate, SelectionEntity entity,
+-				   const vector<GLuint>& items )
++				   const std::vector<GLuint>& items )
+   {
+     // I guess this is now out of sync with the previous milieu
+     switch ( entity ) {
+     case FIGURE: {
+-      map<GLuint,Dimension>::iterator dimension = dimension_views_.begin();
++      std::map<GLuint,Dimension>::iterator dimension = dimension_views_.begin();
+       for ( ; dimension != dimension_views_.end(); ++dimension )
+ 	if ( activate )
+ 	  (*dimension).second.setMode( lC::Render::REGULAR );
+diff -urp lignumCAD.pld/ocsoliddraw.h lignumCAD.pld2/ocsoliddraw.h
+--- lignumCAD/ocsoliddraw.h	2002-12-13 14:05:52.000000000 +0100
++++ lignumCAD.pld2/ocsoliddraw.h	2010-09-15 21:28:30.000000000 +0200
+@@ -126,7 +126,7 @@ namespace Space3D {
+      * \param items selection name hierarchy.
+      */
+     void setHighlighted ( bool highlight, SelectionEntity entity,
+-			  const vector<GLuint>& items );
++			  const std::vector<GLuint>& items );
+ 
+     /*!
+      * Set the activated status of the given item.
+@@ -135,7 +135,7 @@ namespace Space3D {
+      * \param items selection name hierarchy.
+      */
+     void setActivated ( bool activate, SelectionEntity entity,
+-			const vector<GLuint>& items );
++			const std::vector<GLuint>& items );
+     //! Generic update function. Generally the solid geometry has changed.
+     void update ( void );
+     //! Compute the hidden lines for the current orientation of the view.
+@@ -175,7 +175,7 @@ namespace Space3D {
+      */
+     GLuint faceGLName ( uint id )
+     {
+-      map<uint,GLuint>::const_iterator gl_name = face_ids_.find( id );
++      std::map<uint,GLuint>::const_iterator gl_name = face_ids_.find( id );
+       if ( gl_name != face_ids_.end() )
+ 	return (*gl_name).second;
+       return 0;			// Really an error...
+@@ -215,21 +215,21 @@ namespace Space3D {
+     GLuint hlr_bg_name_;
+ 
+     //! The selection names for the wire and solid assigned to each face.
+-    map< uint, GLuint > face_ids_;
++    std::map< uint, GLuint > face_ids_;
+     //! The display lists and the attributes of the corresponding graphics item.
+-    map< GLuint, GV > face_views_;
++    std::map< GLuint, GV > face_views_;
+     //! The display lists and the attributes of the corresponding graphics item.
+-    map< GLuint, GV > wire_views_;
++    std::map< GLuint, GV > wire_views_;
+     //! The selection name assigned to each handle.
+-    map< uint, GLuint > handle_ids_;
++    std::map< uint, GLuint > handle_ids_;
+     //! The selection name assigned to each parameter's dimension.
+-    map< QString, GLuint > dimension_names_;
++    std::map< QString, GLuint > dimension_names_;
+     //! The dimension drawer objects.
+-    map< GLuint, Dimension > dimension_views_;
++    std::map< GLuint, Dimension > dimension_views_;
+     //! The selection name assigned to each construction datum.
+-    map< QString, GLuint > datum_names_;
++    std::map< QString, GLuint > datum_names_;
+     //! The construction data drawer objects.
+-    map< GLuint, ConstructionDatumView* > datum_views_;
++    std::map< GLuint, ConstructionDatumView* > datum_views_;
+ 
+     //! Standard color material (not quite white).
+     static GLfloat material_std_[4];
+diff -urp lignumCAD.pld/ocsolidview.cpp lignumCAD.pld2/ocsolidview.cpp
+--- lignumCAD/ocsolidview.cpp	2002-12-13 17:17:40.000000000 +0100
++++ lignumCAD.pld2/ocsolidview.cpp	2010-09-15 21:29:31.000000000 +0200
+@@ -234,14 +234,14 @@ namespace Space3D {
+     ModifySolidCommand::ModifySolidCommand ( const QString& name,
+ 					     DesignBookView* design_book_view,
+ 					     OCSolid* solid,
+-					     const map<QString,double>&
++					     const std::map<QString,double>&
+ 					     old_parameters )
+       : Command( name ), design_book_view_( design_book_view ),
+ 	db_url_( solid->dbURL() ), old_parameters_( old_parameters )
+     {
+       // Could improve the efficiency of this by limiting it to only
+       // what's actually changed...
+-      map<QString,Parameter>::const_iterator parameter =
++      std::map<QString,Parameter>::const_iterator parameter =
+ 	solid->parametersBegin();
+       for ( ; parameter != solid->parametersEnd(); ++parameter )
+ 	new_parameters_[ (*parameter).first ] = (*parameter).second.value();
+@@ -283,10 +283,10 @@ namespace Space3D {
+ 
+       modify_solid_element.setAttribute( lC::STR::NAME, db_url_.toString(true) );
+       
+-      map<QString,double>::const_iterator old_parameter =old_parameters_.begin();
++      std::map<QString,double>::const_iterator old_parameter =old_parameters_.begin();
+ 
+       for ( ; old_parameter != old_parameters_.end(); ++old_parameter ) {
+-	map<QString,double>::const_iterator new_parameter =
++	std::map<QString,double>::const_iterator new_parameter =
+ 	  new_parameters_.find( (*old_parameter).first );
+ 	if ( new_parameter != new_parameters_.end() ) {
+ 	  QDomElement parameter_element = document->createElement(lC::STR::PARAMETER);
+@@ -303,9 +303,9 @@ namespace Space3D {
+     //! Reference of solid.
+     DBURL db_url_;
+     //! Old parameters.
+-    map<QString,double> old_parameters_;
++    std::map<QString,double> old_parameters_;
+     //! New parameters.
+-    map<QString,double> new_parameters_;
++    std::map<QString,double> new_parameters_;
+   };
+ 
+   OCSolidModifyInput::OCSolidModifyInput ( OCSolid* solid,
+@@ -372,7 +372,7 @@ namespace Space3D {
+ 
+ 	  if ( solid_view_->isGeometry( g ) ) {
+ 
+-	    map<QString,Parameter>::const_iterator parameter =
++	    std::map<QString,Parameter>::const_iterator parameter =
+ 	      solid_->parametersBegin();
+ 	    for ( ; parameter != solid_->parametersEnd(); ++parameter )
+ 	      old_parameters_[ (*parameter).first ] = (*parameter).second.value();
+@@ -509,7 +509,7 @@ namespace Space3D {
+     list_view_item_->setText( lC::TYPE, trC( lC::STR::SOLID ) );
+     QString detail = tr( "%1:" ).arg( solid_->baseShape() );
+     QStringList param_strings;
+-    map<QString,Parameter>::const_iterator parameter = solid_->parametersBegin();
++    std::map<QString,Parameter>::const_iterator parameter = solid_->parametersBegin();
+     for ( ; parameter != solid_->parametersEnd(); ++parameter )
+       param_strings << tr( " %1: %2" ).
+ 	arg( trC( (*parameter).second.title() ) ).
+@@ -646,7 +646,7 @@ namespace Space3D {
+     return solid_->dbURL();
+   }
+ 
+-  QString OCSolidView::selectionText ( const vector<GLuint>& selection_name,
++  QString OCSolidView::selectionText ( const std::vector<GLuint>& selection_name,
+ 				       SelectionEntity entity ) const
+   {
+     QString text;
+@@ -668,7 +668,7 @@ namespace Space3D {
+   }
+ 
+   void OCSolidView::setHighlighted( bool highlight, SelectionEntity entity,
+-				    const vector<GLuint>& items )
++				    const std::vector<GLuint>& items )
+   {
+     
+     if (entity == FIGURE ) {
+@@ -686,7 +686,7 @@ namespace Space3D {
+   }
+ 
+   void OCSolidView::setActivated( bool activate, SelectionEntity entity,
+-				  const vector<GLuint>& items )
++				  const std::vector<GLuint>& items )
+   {
+     if ( entity == FIGURE ) {
+ 
+@@ -736,7 +736,7 @@ namespace Space3D {
+     // Update the list view.
+     QString detail = tr( "%1:" ).arg( solid_->baseShape() );
+     QStringList param_strings;
+-    map<QString,Parameter>::const_iterator parameter = solid_->parametersBegin();
++    std::map<QString,Parameter>::const_iterator parameter = solid_->parametersBegin();
+     for ( ; parameter != solid_->parametersEnd(); ++parameter )
+       param_strings << tr( " %1: %2" ).
+ 	arg( trC( (*parameter).second.title() ) ).
+@@ -792,7 +792,7 @@ namespace Space3D {
+       if ( ret == QDialog::Rejected ) return;
+ 
+       if ( parameter_info_dialog_->parameterLengthConstraint->edited() ) {
+-	map<QString,double> old_parameter;
++	std::map<QString,double> old_parameter;
+ 	old_parameter[ parameter_name ] = parameter.value();
+ 	//	cout << "Updating parameter " << parameter_name << " of " << solid_->path()
+ 	//	     << endl;
+diff -urp lignumCAD.pld/octexturefunction.cpp lignumCAD.pld2/octexturefunction.cpp
+--- lignumCAD/octexturefunction.cpp	2002-11-13 14:09:45.000000000 +0100
++++ lignumCAD.pld2/octexturefunction.cpp	2010-09-15 21:30:45.000000000 +0200
+@@ -695,7 +695,7 @@ OCTextureFunction* OCTextureFactory::fun
+ 
+   Handle( Geom_Surface ) surface = BRep_Tool::Surface( face );
+ 
+-  map<Standard_Integer, OCTextureFunction*>::iterator tf =
++  std::map<Standard_Integer, OCTextureFunction*>::iterator tf =
+     texture_functions_.find( surface->DynamicType()->HashCode( IntegerLast() ) );
+ 
+   OCTextureFunction* texture_function;
+diff -urp lignumCAD.pld/octexturefunction.h lignumCAD.pld2/octexturefunction.h
+--- lignumCAD/octexturefunction.h	2002-10-09 19:03:28.000000000 +0200
++++ lignumCAD.pld2/octexturefunction.h	2010-09-15 21:30:26.000000000 +0200
+@@ -109,7 +109,7 @@ private:
+   static OCTextureFactory* instance_;
+ 
+   //! The available texture function objects.
+-  map<Standard_Integer, OCTextureFunction*> texture_functions_;
++  std::map<Standard_Integer, OCTextureFunction*> texture_functions_;
+ };
+ 
+ #endif // OCTEXTUREFUNCTION_H
