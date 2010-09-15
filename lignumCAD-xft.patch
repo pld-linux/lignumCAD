@@ -1,7 +1,59 @@
+diff -urp lignumCAD/xftint.h lignumCAD2a/xftint.h
+--- lignumCAD/xftint.h	2002-06-14 19:52:59.000000000 +0200
++++ lignumCAD2a/xftint.h	2010-05-12 10:07:28.000000000 +0200
+@@ -29,7 +29,11 @@
+ #ifdef FREETYPE2
+ #include "XftFreetype.h"
+ #else
+-#include "Xft.h"
++#include <Xft.h>
++#endif
++
++#ifdef __cplusplus
++extern "C" {
+ #endif
+ 
+ typedef struct _XftMatcher {
+@@ -79,6 +83,26 @@ typedef struct _XftDisplayInfo {
+     Bool		    hasRender;
+ } XftDisplayInfo;
+ 
++/* Stuff needed to fix missing bits from Xft... */
++typedef struct _XftValueList {
++    struct _XftValueList    *next;
++    XftValue		    value;
++} XftValueList;
++
++typedef struct _FcPatternElt {
++    const char	    *object;
++    XftValueList    *values;
++} FcPatternElt;
++
++typedef struct _FcPattern {
++    int		    num;
++    int		    size;
++    FcPatternElt    *elts;
++    int		    ref;
++} FcPattern;
++
++#define XftPatternElt	FcPatternElt
++
+ extern XftFontSet	*_XftGlobalFontSet;
+ extern XftDisplayInfo	*_XftDisplayInfo;
+ extern char		**XftConfigDirs;
+@@ -485,4 +509,8 @@ _XftStrCmpIgnoreCase (const char *s1, co
+ Bool
+ XftCoreAddFonts (XftFontSet *set, Display *dpy, Bool ignore_scalable);
+ 
++#ifdef __cplusplus
++}
++#endif
++
+ #endif /* _XFT_INT_H_ */
 diff -urp lignumCAD.pld2a/xftname.c lignumCAD.pld/xftname.c
 --- lignumCAD.pld2a/xftname.c	2010-09-15 19:20:43.000000000 +0200
 +++ lignumCAD.pld/xftname.c	2010-09-15 23:58:54.000000000 +0200
-@@ -164,7 +164,7 @@ _XftNameConvert (XftType type, char *str
+@@ -140,7 +140,7 @@ _XftNameConvert (XftType type, char *str
  	    v.u.i = atoi (string);
  	break;
      case XftTypeString:
@@ -10,7 +62,7 @@ diff -urp lignumCAD.pld2a/xftname.c lignumCAD.pld/xftname.c
  	break;
      case XftTypeBool:
  	v.u.b = XftDefaultParseBool (string);
-@@ -335,14 +335,18 @@ _XftNameUnparseValue (XftValue v, char *
+@@ -311,14 +311,18 @@ _XftNameUnparseValue (XftValue v, char *
  	sprintf (temp, "%g", v.u.d);
  	return _XftNameUnparseString (temp, 0, destp, lenp);
      case XftTypeString:
@@ -31,7 +83,7 @@ diff -urp lignumCAD.pld2a/xftname.c lignumCAD.pld/xftname.c
      return False;
  }
  
-@@ -363,6 +367,44 @@ _XftNameUnparseValueList (XftValueList *
+@@ -339,6 +343,44 @@ _XftNameUnparseValueList (XftValueList *
  #define XFT_ESCAPE_FIXED    "\\-:,"
  #define XFT_ESCAPE_VARIABLE "\\=_:,"
  
