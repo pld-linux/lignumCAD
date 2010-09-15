@@ -1,0 +1,122 @@
+diff -urp lignumCAD.pld2a/centerlineinfodialog.ui lignumCAD.pld/centerlineinfodialog.ui
+--- lignumCAD.pld2a/centerlineinfodialog.ui	2002-12-03 21:41:52.000000000 +0100
++++ lignumCAD.pld/centerlineinfodialog.ui	2010-09-15 23:54:08.000000000 +0200
+@@ -356,7 +356,11 @@
+ </tabstops>
+ <includes>
+     <include location="local" impldecl="in implementation">centerlineinfodialog.ui.h</include>
++    <include location="local" impldecl="in implementation">../lcfilechooser/lcfilechooser.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultlengthspinbox/lcdefaultlengthspinbox.h</include>
++    <include location="local" impldecl="in implementation">../lcconstraintchooser/lcconstraintchooser.h</include>
+ </includes>
++
+ <slots>
+     <slot>buttonHelp_clicked()</slot>
+ </slots>
+diff -urp lignumCAD.pld2a/dimensioninfodialog.ui lignumCAD.pld/dimensioninfodialog.ui
+--- lignumCAD.pld2a/dimensioninfodialog.ui	2002-12-12 18:00:09.000000000 +0100
++++ lignumCAD.pld/dimensioninfodialog.ui	2010-09-15 23:54:08.000000000 +0200
+@@ -471,6 +471,9 @@
+ </tabstops>
+ <includes>
+     <include location="local" impldecl="in implementation">dimensioninfodialog.ui.h</include>
++    <include location="local" impldecl="in implementation">../lcfilechooser/lcfilechooser.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultlengthspinbox/lcdefaultlengthspinbox.h</include>
++    <include location="local" impldecl="in implementation">../lcconstraintchooser/lcconstraintchooser.h</include>
+ </includes>
+ <slots>
+     <slot>buttonHelp_clicked()</slot>
+diff -urp lignumCAD.pld2a/modelinfodialog.ui lignumCAD.pld/modelinfodialog.ui
+--- lignumCAD.pld2a/modelinfodialog.ui	2002-09-19 02:20:12.000000000 +0200
++++ lignumCAD.pld/modelinfodialog.ui	2010-09-15 23:54:08.000000000 +0200
+@@ -343,6 +343,7 @@ standard file requestor if you want to o
+ </tabstops>
+ <includes>
+     <include location="local" impldecl="in implementation">modelinfodialog.ui.h</include>
++    <include location="local" impldecl="in implementation">../lcfilechooser/lcfilechooser.h</include>
+ </includes>
+ <slots>
+     <slot access="private" specifier="non virtual">modelNameEdit_textChanged( const QString &amp; text )</slot>
+diff -urp lignumCAD.pld2a/newmodelwizard.ui lignumCAD.pld/newmodelwizard.ui
+--- lignumCAD.pld2a/newmodelwizard.ui	2002-11-26 18:32:36.000000000 +0100
++++ lignumCAD.pld/newmodelwizard.ui	2010-09-15 23:54:08.000000000 +0200
+@@ -458,6 +458,7 @@ standard file requestor if you want to o
+     <include location="local" impldecl="in implementation">pagefactory.h</include>
+     <include location="global" impldecl="in implementation">qbuttongroup.h</include>
+     <include location="local" impldecl="in implementation">newmodelwizard.ui.h</include>
++    <include location="local" impldecl="in implementation">../lcfilechooser/lcfilechooser.h</include>
+ </includes>
+ <forwards>
+     <forward>class QRadioButton;</forward>
+diff -urp lignumCAD.pld2a/offsetinfodialog.ui lignumCAD.pld/offsetinfodialog.ui
+--- lignumCAD.pld2a/offsetinfodialog.ui	2002-11-26 16:58:24.000000000 +0100
++++ lignumCAD.pld/offsetinfodialog.ui	2010-09-15 23:54:08.000000000 +0200
+@@ -155,6 +155,7 @@
+ </tabstops>
+ <includes>
+     <include location="local" impldecl="in implementation">offsetinfodialog.ui.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultlengthconstraint/lcdefaultlengthconstraint.h</include>
+ </includes>
+ <slots>
+     <slot>buttonHelp_clicked()</slot>
+diff -urp lignumCAD.pld2a/parameterinfodialog.ui lignumCAD.pld/parameterinfodialog.ui
+--- lignumCAD.pld2a/parameterinfodialog.ui	2002-09-20 14:31:50.000000000 +0200
++++ lignumCAD.pld/parameterinfodialog.ui	2010-09-15 23:54:08.000000000 +0200
+@@ -158,6 +158,7 @@
+ </tabstops>
+ <includes>
+     <include location="local" impldecl="in implementation">parameterinfodialog.ui.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultlengthconstraint/lcdefaultlengthconstraint.h</include>
+ </includes>
+ <slots>
+     <slot>buttonHelp_clicked()</slot>
+diff -urp lignumCAD.pld2a/preferencesdialog.ui lignumCAD.pld/preferencesdialog.ui
+--- lignumCAD.pld2a/preferencesdialog.ui	2002-09-19 15:24:54.000000000 +0200
++++ lignumCAD.pld/preferencesdialog.ui	2010-09-15 23:54:08.000000000 +0200
+@@ -1553,6 +1553,14 @@ Note that the clearance length specified
+     <include location="global" impldecl="in implementation">qpicture.h</include>
+     <include location="global" impldecl="in implementation">qpaintdevicemetrics.h</include>
+     <include location="local" impldecl="in implementation">preferencesdialog.ui.h</include>
++    <include location="local" impldecl="in implementation">../lcfilechooser/lcfilechooser.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultlengthspinbox/lcdefaultlengthspinbox.h</include>
++    <include location="local" impldecl="in implementation">../lcconstraintchooser/lcconstraintchooser.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultcombobox/lcdefaultcombobox.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultratiospinbox/lcdefaultratiospinbox.h</include>
++    <include location="local" impldecl="in implementation">../lccolorchooser/lccolorchooser.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultfilechooser/lcdefaultfilechooser.h</include>
++    <include location="local" impldecl="in implementation">../lcfontchooser/lcfontchooser.h</include>
+ </includes>
+ <variables>
+     <variable>OpenGLExample* example_;</variable>
+diff -urp lignumCAD.pld2a/rectangleinfodialog.ui lignumCAD.pld/rectangleinfodialog.ui
+--- lignumCAD.pld2a/rectangleinfodialog.ui	2002-09-19 22:20:19.000000000 +0200
++++ lignumCAD.pld/rectangleinfodialog.ui	2010-09-15 23:54:08.000000000 +0200
+@@ -929,6 +929,15 @@
+ <includes>
+     <include location="local" impldecl="in implementation">constants.h</include>
+     <include location="local" impldecl="in implementation">rectangleinfodialog.ui.h</include>
++    <include location="local" impldecl="in implementation">../lcfilechooser/lcfilechooser.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultlengthspinbox/lcdefaultlengthspinbox.h</include>
++    <include location="local" impldecl="in implementation">../lcconstraintchooser/lcconstraintchooser.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultcombobox/lcdefaultcombobox.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultratiospinbox/lcdefaultratiospinbox.h</include>
++    <include location="local" impldecl="in implementation">../lccolorchooser/lccolorchooser.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultfilechooser/lcdefaultfilechooser.h</include>
++    <include location="local" impldecl="in implementation">../lcfontchooser/lcfontchooser.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultspinbox/lcdefaultspinbox.h</include>
+ </includes>
+ <slots>
+     <slot>init()</slot>
+diff -urp lignumCAD.pld2a/referencelineinfodialog.ui lignumCAD.pld/referencelineinfodialog.ui
+--- lignumCAD.pld2a/referencelineinfodialog.ui	2002-12-03 21:41:52.000000000 +0100
++++ lignumCAD.pld/referencelineinfodialog.ui	2010-09-15 23:54:08.000000000 +0200
+@@ -356,6 +356,9 @@
+ </tabstops>
+ <includes>
+     <include location="local" impldecl="in implementation">referencelineinfodialog.ui.h</include>
++    <include location="local" impldecl="in implementation">../lcfilechooser/lcfilechooser.h</include>
++    <include location="local" impldecl="in implementation">../lcdefaultlengthspinbox/lcdefaultlengthspinbox.h</include>
++    <include location="local" impldecl="in implementation">../lcconstraintchooser/lcconstraintchooser.h</include>
+ </includes>
+ <slots>
+     <slot>buttonHelp_clicked()</slot>

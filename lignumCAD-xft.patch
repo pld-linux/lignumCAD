@@ -1,0 +1,78 @@
+diff -urp lignumCAD.pld2a/xftname.c lignumCAD.pld/xftname.c
+--- lignumCAD.pld2a/xftname.c	2010-09-15 19:20:43.000000000 +0200
++++ lignumCAD.pld/xftname.c	2010-09-15 23:58:54.000000000 +0200
+@@ -164,7 +164,7 @@ _XftNameConvert (XftType type, char *str
+ 	    v.u.i = atoi (string);
+ 	break;
+     case XftTypeString:
+-	v.u.s = string;
++	v.u.s = (unsigned char *)string;
+ 	break;
+     case XftTypeBool:
+ 	v.u.b = XftDefaultParseBool (string);
+@@ -335,14 +335,18 @@ _XftNameUnparseValue (XftValue v, char *
+ 	sprintf (temp, "%g", v.u.d);
+ 	return _XftNameUnparseString (temp, 0, destp, lenp);
+     case XftTypeString:
+-	return _XftNameUnparseString (v.u.s, escape, destp, lenp);
++	return _XftNameUnparseString ((char *)v.u.s, escape, destp, lenp);
+     case XftTypeBool:
+ 	return _XftNameUnparseString (v.u.b ? "True" : "False", 0, destp, lenp);
+     case XftTypeMatrix:
+ 	sprintf (temp, "%g %g %g %g", 
+ 		 v.u.m->xx, v.u.m->xy, v.u.m->yx, v.u.m->yy);
+ 	return _XftNameUnparseString (temp, 0, destp, lenp);
+-    }
++     case FcTypeCharSet:
++     case FcTypeFTFace:
++     case FcTypeLangSet:
++	return True;
++   }
+     return False;
+ }
+ 
+@@ -363,6 +367,44 @@ _XftNameUnparseValueList (XftValueList *
+ #define XFT_ESCAPE_FIXED    "\\-:,"
+ #define XFT_ESCAPE_VARIABLE "\\=_:,"
+ 
++static int
++XftPatternPosition (const XftPattern *p, const char *object)
++{
++    int	    low, high, mid, c;
++
++    low = 0;
++    high = p->num - 1;
++    c = 1;
++    mid = 0;
++    while (low <= high)
++    {
++	mid = (low + high) >> 1;
++	c = strcmp (p->elts[mid].object, object);
++	if (c == 0)
++	    return mid;
++	if (c < 0)
++	    low = mid + 1;
++	else
++	    high = mid - 1;
++    }
++    if (c < 0)
++	mid++;
++    return -(mid + 1);
++}
++
++XftPatternElt *
++XftPatternFindElt (const XftPattern *p, const char *object)
++{
++    int	    i = XftPatternPosition (p, object);
++    if (i < 0)
++	return 0;
++    return &p->elts[i];
++}
++
++XftPatternElt *
++XftPatternFind (XftPattern *p, const char *object, Bool insert)
++{ return FcPatternFind (p, object, insert); }
++
+ Bool
+ XftNameUnparse (XftPattern *pat, char *dest, int len)
+ {

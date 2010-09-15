@@ -1,0 +1,23 @@
+diff -rpu lignumCAD.pld/ochiddendraw.cpp lignumCAD.pld2/ochiddendraw.cpp
+--- lignumCAD.pld/ochiddendraw.cpp	2002-11-13 14:35:48.000000000 +0100
++++ lignumCAD.pld2/ochiddendraw.cpp	2010-09-15 22:29:54.000000000 +0200
+@@ -206,6 +206,6 @@ namespace Space3D {
+ 
+     glEndList();
+ 
+-    delete brep_hlr;
++    delete &brep_hlr;
+   }
+ } // End of Space3D namespace
+diff -rpu lignumCAD.pld/ocsoliddraw.cpp lignumCAD.pld2/ocsoliddraw.cpp
+--- lignumCAD.pld/ocsoliddraw.cpp	2010-09-15 23:40:39.000000000 +0200
++++ lignumCAD.pld2/ocsoliddraw.cpp	2010-09-15 23:30:06.000000000 +0200
+@@ -558,7 +558,7 @@ namespace Space3D {
+ 
+     glEndList();
+ 
+-    delete brep_hlr;
++    delete &brep_hlr;
+   }
+ 
+   void OCSolidDraw::updateMaterial ( void )
