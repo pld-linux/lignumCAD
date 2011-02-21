@@ -1,0 +1,13 @@
+--- systemdependencies.cpp.orig	2002-12-18 15:10:37.000000000 +0100
++++ systemdependencies.cpp	2011-02-21 23:39:50.000000000 +0100
+@@ -42,6 +42,10 @@ namespace System {
+     QFont qfont;
+     qfont.fromString( font );
+ 
++	file="/usr/share/fonts/TTF/DejaVuSerif.ttf";
++	point_size=13;
++	return true;
++
+     bool found_file = false, found_point_size = false;
+ 
+ #if defined( Q_WS_X11 )
