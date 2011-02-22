@@ -66,6 +66,7 @@ końcowego wyglądu przedmiotu projektu.
 sed -i -e "s|/opt/lignumCAD|%{_datadir}/%{name}|" configuration.h
 sed -i -e 's/\(lib\)*emf.\(h\|cpp\)//g' lignumCAD.pro
 sed -i -e 's/DELETE /LDELETE/' constants.h command.cpp
+%{__rm} *emf.{h,cpp}
 
 %build
 export QTDIR=/usr
