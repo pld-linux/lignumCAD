@@ -23,6 +23,7 @@ URL:		http://lignumcad.sourceforge.net/
 BuildRequires:	OpenCASCADE-devel >= 4
 BuildRequires:	OpenGL-GLU-devel >= 1.3
 BuildRequires:	freetype-devel >= 2.1.3
+BuildRequires:	libEMF-devel
 BuildRequires:	qmake
 BuildRequires:	qt-devel >= 3:3.0.6
 BuildRequires:	sed >= 4.0
@@ -63,13 +64,15 @@ końcowego wyglądu przedmiotu projektu.
 %patch11 -p1
 %patch12 -p0
 sed -i -e "s|/opt/lignumCAD|%{_datadir}/%{name}|" configuration.h
+sed -i -e 's/\(lib\)*emf.\(h\|cpp\)//g' lignumCAD.pro
+sed -i -e 's/DELETE /LDELETE/' constants.h command.cpp
 
 %build
 export QTDIR=/usr
 qmake lignumCAD.pro \
-	unix:LIBS="-lGL -lTKTopAlgo -lTKGeomAlgo -lTKBRep -lTKGeomBase -lTKG3d -lTKG2d -lTKMath -lTKernel -lfontconfig -lTKMesh -lTKBool -lTKBO -lTKPrim" \
+	unix:LIBS="-lGL -lTKTopAlgo -lTKGeomAlgo -lTKBRep -lTKGeomBase -lTKG3d -lTKG2d -lTKMath -lTKernel -lfontconfig -lTKMesh -lTKBool -lTKBO -lTKPrim -lEMF" \
 	-after \
-	unix:INCLUDEPATH+=%{_includedir}/{freetype2,X11/Xft,OpenCASCADE} \
+	unix:INCLUDEPATH+=%{_includedir}/{OpenCASCADE,X11/Xft,freetype2,libEMF} \
 	en_documentation.files='' \
 	en_documentation_graphics.files='' \
 	en_so_documentation.files='' \
