@@ -6,6 +6,7 @@ Release:	1
 License:	GPL/LGPL
 Group:		X11/Applications/Science
 Source0:	%{name}.tar.gz
+# Source0-md5:	cd64fb7d3c6f65898d30eb1781113350
 Patch0:		%{name}-gcc3.patch
 Patch1:		%{name}-gcc34.patch
 Patch2:		%{name}-gcc4.patch
